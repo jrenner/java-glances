@@ -1,0 +1,2 @@
+- add a method to each data structure that returns it's data in a nice formatted string
+- separate Main into a proper test class (JUnit?)
