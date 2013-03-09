@@ -14,12 +14,21 @@ public class Memory {
     public long buffers;
     public long active;
     public long total;
-    public long percent;
+    public double percent; // percent of what? used?
     public long free;
 
     public void printData() {
         String inactiveText = Glances.autoUnit(inactive);
-        String text = String.format("\tMemory - inactive: %s", inactiveText);
+        String cachedText = Glances.autoUnit(cached);
+        String usedText = Glances.autoUnit(used);
+        String buffersText = Glances.autoUnit(buffers);
+        String activeText = Glances.autoUnit(active);
+        String totalText = Glances.autoUnit(total);
+        String percentText = String.format("%.1f", percent);
+        String freeText = Glances.autoUnit(free);
+        String text = String.format("Memory:\n\tinactive: %s, active: %s", inactiveText, activeText);
+        text += String.format("\n\tused: %s, total: %s", usedText, totalText);
+        text += String.format("\n\tpercent: %s, free: %s", percentText, freeText);
         System.out.println(text);
     }
 }

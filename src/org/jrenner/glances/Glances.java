@@ -5,8 +5,10 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.*;
 
 public class Glances {
@@ -136,6 +138,16 @@ public class Glances {
     public Memory getMem() {
         String memJson = executeAPICall("getMem");
         return gson.fromJson(memJson, Memory.class);
+    }
+
+    public MemorySwap getMemSwap() {
+        String swapJson = executeAPICall("getMemSwap");
+        return gson.fromJson(swapJson, MemorySwap.class);
+    }
+
+    public String getNow() {
+        //TODO parse into a Date object?
+        return executeAPICall("getNow");
     }
 
     /**

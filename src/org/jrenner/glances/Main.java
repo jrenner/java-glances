@@ -21,12 +21,14 @@ public class Main {
         glances = new Glances(serverURL);
 
         // run tests
-        //testNetwork();
-        //testCpu();
-        //testDiskIO();
-        //testFs();
-        //testLoad();
+        testNetwork();
+        testCpu();
+        testDiskIO();
+        testFs();
+        testLoad();
         testMem();
+        testMemSwap();
+        testNow();
     }
 
     public static void testNetwork() {
@@ -75,6 +77,18 @@ public class Main {
         print("Testing getMem()");
         Memory memory = glances.getMem();
         memory.printData();
+    }
+
+    public static void testMemSwap() {
+        print("Testing getMemSwap()");
+        MemorySwap swap = glances.getMemSwap();
+        swap.printData();
+    }
+
+    public static void testNow() {
+        print("Testing getNow()");
+        String now = glances.getNow();
+        print(now);
     }
 
 }
