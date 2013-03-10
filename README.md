@@ -1,6 +1,8 @@
 java-glances
 ============
 
+<b><i>WARNING</i>: This library is new and and things may change over the next few days/weeks</b>
+
 A Java library for the Glances XML RPC API<br>
 
 What is Glances?
