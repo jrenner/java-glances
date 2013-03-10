@@ -5,6 +5,7 @@
 *.war
 *.ear
 out/*
+libs/*
 
 # IntelliJ Idea
 *.iml

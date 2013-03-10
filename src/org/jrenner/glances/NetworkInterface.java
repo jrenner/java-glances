@@ -27,7 +27,7 @@ public class NetworkInterface {
     }
 
     public void convertToBytes() {
-        if (dataIsBytes) {
+        if (isDataInBytes()) {
             System.out.println(interface_name +
                     " - Did not convert to bytes: data is already in bytes");
             return;
@@ -37,5 +37,26 @@ public class NetworkInterface {
         cumulative_rx /= 8;
         cumulative_tx /= 8;
         dataIsBytes = true;
+    }
+
+    /**
+     * This method should be unnecessary, as the data is originally retrieved as bits.
+     * It is including for completeness' sake, but your code might need refactoring if you
+     * are using this.
+     * NOTE:  There might be a very small loss of accuracy due to the remainder being thrown away
+     * in the convertToBytes operation. (i.e. 11 / 8 = 1, 1 * 8 = 8)
+     */
+    public void convertToBits() {
+        rx *= 8;
+        tx *= 8;
+        cumulative_rx *=8;
+        cumulative_tx *=8;
+        dataIsBytes = false;
+    }
+
+    public boolean isDataInBytes() {
+        if (dataIsBytes)
+            return true;
+        return false;
     }
 }
