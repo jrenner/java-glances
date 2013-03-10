@@ -12,8 +12,9 @@ What does this library do?
 Read the specification of the Glances API:
 - https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
 
-How to build and install?
-- <i>TODO</i>
+How to use?
+- Download this .jar with the dependencies included: https://www.dropbox.com/sh/tllpfxltl2dms12/V0ZsRALxn6/java-glances.jar
+- Add as a library and follow the example below to initialize a Glances object
  
 Dependencies:
 - [Apache XMLRPC](http://ws.apache.org/xmlrpc/)

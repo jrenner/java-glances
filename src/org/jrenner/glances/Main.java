@@ -21,7 +21,9 @@ public class Main {
         glances = new Glances(serverURL);
 
         // run tests
-        /*testNetwork();
+        print("Running tests, please make sure glances.py is running " +
+                " with arg '-s' on localhost:61209");
+        testNetwork();
         testCpu();
         testDiskIO();
         testFs();
@@ -31,8 +33,8 @@ public class Main {
         testNow();
         testLimits();
         testProcessCount();
-        testProcessList(); */
-        //testSensors();
+        testProcessList();
+        testSensors();
         testSystem();
 
     }
