@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Implementation-Version: 0.1b
-Main-Class: org.jrenner.glances.Main
+Main-Class: org.jrenner.glances.Example
 

@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-public class Main {
+public class Example {
     private static Glances glances;
 
     private static void print(String text) {
