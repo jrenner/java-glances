@@ -2,15 +2,22 @@ java-glances
 ============
 
 A Java library for the Glances XML RPC API<br>
+
 What is Glances?
-- Glances is a CLI system monitor written in Python
-- https://github.com/nicolargo/glances.git
+- [Glances](https://github.com/nicolargo/glances.git) is a CLI system monitor written in Python
 
 What does this library do?
 - If Glances is run as ```glances -s``` then information can be retrieved from it using an XML/RPC API
 
+Read the specification of the Glances API:
+- https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
+
 How to build and install?
 - <i>TODO</i>
+ 
+Dependencies:
+- [Apache XMLRPC](http://ws.apache.org/xmlrpc/)
+- [Google gson](https://code.google.com/p/google-gson/)
 
 Example usage:
 ```java
@@ -59,7 +66,3 @@ Net[lo]:
 Net[wlan0]:
 	rx/tx: 1.3MB / 181.2KB, cumulative rx/tx: 267.6MB / 13.9MB
 ```	
-
-Dependencies:
-- [Apache XMLRPC](http://ws.apache.org/xmlrpc/)
-- [Google gson](https://code.google.com/p/google-gson/)
