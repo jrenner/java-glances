@@ -5,10 +5,8 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.util.*;
 
 public class Glances {
@@ -148,6 +146,43 @@ public class Glances {
     public String getNow() {
         //TODO parse into a Date object?
         return executeAPICall("getNow");
+    }
+
+    public Limits getAllLimits() {
+        String limitsJson = executeAPICall("getAllLimits");
+        Limits limits = gson.fromJson(limitsJson, Limits.class);
+        return limits;
+    }
+
+    public ProcessCount getProcessCount() {
+        String pcountJson = executeAPICall("getProcessCount");
+        ProcessCount processCount = gson.fromJson(pcountJson, ProcessCount.class);
+        return processCount;
+    }
+
+    public List<Process> getProcessList() {
+        String plistJson = executeAPICall("getProcessList");
+        Process[] tempArray = gson.fromJson(plistJson, Process[].class);
+        return Arrays.asList(tempArray);
+    }
+
+    /**
+     * As of Glances 1.6, only avaiable on Linux when run with glances.py -e
+     */
+    public List<Sensor> getSensors() {
+        String sensorsJson = executeAPICall("getSensors");
+        // TODO let's do this better
+        if (sensorsJson.equals("[]")) {
+            print("getSensors() - No data returned, please see documentation. as of glances.py 1.6 sensor data" +
+                " is only available on linux, and when enabled");
+        }
+        Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
+        return Arrays.asList(tempArray);
+    }
+
+    public SystemInfo getSystem() {
+        String systemJson = executeAPICall("getSystem");
+        return gson.fromJson(systemJson, SystemInfo.class);
     }
 
     /**

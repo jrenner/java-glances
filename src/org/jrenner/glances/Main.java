@@ -21,7 +21,7 @@ public class Main {
         glances = new Glances(serverURL);
 
         // run tests
-        testNetwork();
+        /*testNetwork();
         testCpu();
         testDiskIO();
         testFs();
@@ -29,6 +29,12 @@ public class Main {
         testMem();
         testMemSwap();
         testNow();
+        testLimits();
+        testProcessCount();
+        testProcessList(); */
+        //testSensors();
+        testSystem();
+
     }
 
     public static void testNetwork() {
@@ -89,6 +95,41 @@ public class Main {
         print("Testing getNow()");
         String now = glances.getNow();
         print(now);
+    }
+
+    public static void testLimits() {
+        print("Testing getAllLimits()");
+        Limits limits = glances.getAllLimits();
+        limits.printData();
+    }
+
+    public static void testProcessCount() {
+        print("Testing getProcessCount()");
+        ProcessCount pCount = glances.getProcessCount();
+        pCount.printData();
+    }
+
+    public static void testProcessList() {
+        print("Testing getProcessList()");
+        List<Process> pList = glances.getProcessList();
+        for (Process proc : pList) {
+            if (proc.memory_percent > 3) // only print non-trivial processes
+                proc.printData();
+        }
+    }
+
+    public static void testSensors() {
+        print("Testing getSensors()");
+        List<Sensor> sensors = glances.getSensors();
+        for (Sensor sensor : sensors) {
+            sensor.printData();
+        }
+    }
+
+    public static void testSystem() {
+        print("Testing getSystem()");
+        SystemInfo sysInfo = glances.getSystem();
+        sysInfo.printData();
     }
 
 }
