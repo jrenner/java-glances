@@ -22,7 +22,7 @@ public class Example {
 
         // run tests
         print("Running tests, please make sure glances.py is running " +
-                " with arg '-s' on localhost:61209");
+                " on localhost with arg '-s' on localhost:61209");
         testNetwork();
         testCpu();
         testDiskIO();
@@ -46,7 +46,7 @@ public class Example {
             net.convertToBytes();
         }
         for (NetworkInterface net : networkInterfaces) {
-            net.printData();
+            print(net.toString());
         }
     }
 
@@ -55,7 +55,7 @@ public class Example {
         Integer cores = glances.getCore();
         print("Cores: " + cores);
         Cpu cpu = glances.getCpu();
-        cpu.printData();
+        print(cpu.toString());
 
     }
 
@@ -63,7 +63,7 @@ public class Example {
         print("Testing getDiskIO()");
         List<DiskIO> disks = glances.getDiskIO();
         for (DiskIO disk : disks) {
-            disk.printData();
+            print(disk.toString());
         }
     }
 
@@ -71,26 +71,26 @@ public class Example {
         print("Testing getFs()");
         List<FileSystem> fileSystems = glances.getFs();
         for (FileSystem fs : fileSystems) {
-            fs.printData();
+            print(fs.toString());
         }
     }
 
     public static void testLoad() {
         print("Testing getLoad()");
         Load load = glances.getLoad();
-        load.printData();
+        print(load.toString());
     }
 
     public static void testMem() {
         print("Testing getMem()");
         Memory memory = glances.getMem();
-        memory.printData();
+        print(memory.toString());
     }
 
     public static void testMemSwap() {
         print("Testing getMemSwap()");
         MemorySwap swap = glances.getMemSwap();
-        swap.printData();
+        print(swap.toString());
     }
 
     public static void testNow() {
@@ -102,13 +102,13 @@ public class Example {
     public static void testLimits() {
         print("Testing getAllLimits()");
         Limits limits = glances.getAllLimits();
-        limits.printData();
+        print(limits.toString());
     }
 
     public static void testProcessCount() {
         print("Testing getProcessCount()");
         ProcessCount pCount = glances.getProcessCount();
-        pCount.printData();
+        print(pCount.toString());
     }
 
     public static void testProcessList() {
@@ -116,7 +116,7 @@ public class Example {
         List<Process> pList = glances.getProcessList();
         for (Process proc : pList) {
             if (proc.memory_percent > 3) // only print non-trivial processes
-                proc.printData();
+                print(proc.toString());
         }
     }
 
@@ -124,14 +124,14 @@ public class Example {
         print("Testing getSensors()");
         List<Sensor> sensors = glances.getSensors();
         for (Sensor sensor : sensors) {
-            sensor.printData();
+            print(sensor.toString());
         }
     }
 
     public static void testSystem() {
         print("Testing getSystem()");
         SystemInfo sysInfo = glances.getSystem();
-        sysInfo.printData();
+        print(sysInfo.toString());
     }
 
 }

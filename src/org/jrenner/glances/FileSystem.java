@@ -12,13 +12,14 @@ public class FileSystem {
     public long avail;
     public long size;
 
-    public void printData() {
-        String usedText = Glances.autoUnit(used) + "B";
+    @Override
+    public String toString() {
+        String usedText = Glances.autoUnit(used) + "B"; // always Bytes
         String availText = Glances.autoUnit(avail) + "B";
         String sizeText = Glances.autoUnit(size) + "B";
-        String text = String.format("\t[%s]: %s (%s) used: %s, avail: %s, size: %s",
+        String text = String.format("[%s]: %s (%s) used: %s, avail: %s, size: %s",
                 device_name, mnt_point, fs_type,
                 usedText, availText, sizeText);
-        System.out.println(text);
+        return text;
     }
 }

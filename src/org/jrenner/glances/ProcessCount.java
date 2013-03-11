@@ -8,11 +8,14 @@ public class ProcessCount {
     public int running;
     public int total;
     public int sleeping;
-    // disk sleep? -> https://github.com/nicolargo/glances/issues/201
+    public int disk_sleep;
+    // TODO figure out how to handle such things as "disk sleep" and other statuses
 
-    public void printData() {
+    public String toString() {
         String text = String.format("ProcessCount: zombie: %d, running: %d, total: %d, " +
-                "sleeping: %d", zombie, running, total, sleeping);
-        System.out.println(text);
+            "sleeping: %d", zombie, running, total, sleeping);
+        if (disk_sleep > 0)
+            text += String.format("disk sleep: %d", disk_sleep);
+        return text;
     }
 }

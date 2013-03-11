@@ -156,6 +156,8 @@ public class Glances {
 
     public ProcessCount getProcessCount() {
         String pcountJson = executeAPICall("getProcessCount");
+        // test statuses
+        pcountJson = "{\"zombie\": 2, \"running\": 1, \"total\": 222, \"disk sleep\": 1, \"sleeping\": 220}";
         ProcessCount processCount = gson.fromJson(pcountJson, ProcessCount.class);
         return processCount;
     }

@@ -8,11 +8,12 @@ public class DiskIO {
     public int read_bytes;
     public int write_bytes;
 
-    public void printData() {
+    @Override
+    public String toString() {
         String writeText = Glances.autoUnit(write_bytes) + "B";
         String readText  = Glances.autoUnit(read_bytes) + "B";
-        String text = String.format("\tDisk[%s]: write: %s, read: %s",
+        String text = String.format("Disk[%s]: write: %s, read: %s",
                 disk_name, writeText, readText);
-        System.out.println(text);
+        return text;
     }
 }

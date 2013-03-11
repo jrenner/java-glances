@@ -1,11 +1,7 @@
 package org.jrenner.glances;
 
 /**
- * Created with IntelliJ IDEA.
- * User: jrenner
- * Date: 3/9/13
- * Time: 7:05 PM
- * To change this template use File | Settings | File Templates.
+ * Data structure for getMem()
  */
 public class Memory {
     public long inactive;
@@ -14,21 +10,22 @@ public class Memory {
     public long buffers;
     public long active;
     public long total;
-    public double percent; // percent of what? used?
+    public double percent; // percent in usage
     public long free;
 
-    public void printData() {
+    @Override
+    public String toString() {
         String inactiveText = Glances.autoUnit(inactive);
-        String cachedText = Glances.autoUnit(cached);
+        //String cachedText = Glances.autoUnit(cached);
         String usedText = Glances.autoUnit(used);
-        String buffersText = Glances.autoUnit(buffers);
+        //String buffersText = Glances.autoUnit(buffers);
         String activeText = Glances.autoUnit(active);
         String totalText = Glances.autoUnit(total);
         String percentText = String.format("%.1f", percent);
         String freeText = Glances.autoUnit(free);
-        String text = String.format("Memory:\n\tinactive: %s, active: %s", inactiveText, activeText);
-        text += String.format("\n\tused: %s, total: %s", usedText, totalText);
-        text += String.format("\n\tpercent: %s, free: %s", percentText, freeText);
-        System.out.println(text);
+        String text = String.format("Memory: inactive: %s, active: %s", inactiveText, activeText);
+        text += String.format(" used: %s, total: %s", usedText, totalText);
+        text += String.format(" percent: %s, free: %s", percentText, freeText);
+        return text;
     }
 }

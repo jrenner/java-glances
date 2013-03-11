@@ -23,20 +23,12 @@ public class Process {
     public long[] memory_info;
     public long nice;
 
-    public void printData() {
-        // TODO this is a mess
-        // formatting some complicated variables
-        String cpu_timesText = String.format("cpu_times: [%.1f, %.1f]", cpu_times[0], cpu_times[1]);
-
-
-        String text = String.format("Process: (pid:%d) %s\n\tusername: %s, status: %s, " +
-            "cpu_times: %s\n\t", pid, name, username, status, cpu_timesText);
-        text += String.format("memPercent: %.1f, cpuPercent: %.1f\n\t",
+    @Override
+    public String toString() {
+        String text = String.format("Process: (pid:%d) %s\n\tusername: %s, status: %s, ",
+                pid, name, username, status);
+        text += String.format("memPercent: %.0f, cpuPercent: %.0f ",
                 memory_percent, cpu_percent);
-        // skip IO counters, not worth the effort right now
-        text += String.format("cmdline: %s\n\tmemory_info: [%d, %d], nice: %d",
-                cmdline, memory_info[0], memory_info[1], nice);
-        System.out.println(text);
-
+        return text;
     }
 }

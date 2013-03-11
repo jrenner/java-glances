@@ -15,7 +15,7 @@ Read the specification of the Glances API:
 - https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
 
 How to use?
-- Download this .jar with the dependencies included: https://www.dropbox.com/sh/tllpfxltl2dms12/V0ZsRALxn6/java-glances.jar
+- Get pre-packaged jar with dependencies included: [java-glances-0.2.jar](https://www.dropbox.com/s/pzroww8mfb8kfy0/java-glances-0.2.jar)
 - Add as a library and follow the example below to initialize a Glances object
  
 Dependencies:
@@ -44,7 +44,7 @@ public class Main {
         // Now we could access fields like 'net.rx' or 'net.interface_name'
         // But let's just use the printData method
         for (NetworkInterface net : networkInterfaces) {
-            net.printData();
+            System.out.println(net.toString())
         }
     }
 ```
@@ -58,14 +58,10 @@ public class NetworkInterface {
     public long cumulative_tx;
     //...
 ```
-Every data structure also has a printData() method to assist with debugging or logging
-(TODO: currently only prints, should return a String).
+Every data structure also has a toString() method
 In the above example, we get the following output from running printData() on all three interfaces:
 ```
-Net[eth0]:
-	rx/tx: 0B / 0B, cumulative rx/tx: 0B / 0B
-Net[lo]:
-	rx/tx: 1.8KB / 1.8KB, cumulative rx/tx: 195.1KB / 195.1KB
-Net[wlan0]:
-	rx/tx: 1.3MB / 181.2KB, cumulative rx/tx: 267.6MB / 13.9MB
+Net[eth0]: rx/tx: 0B / 0B, cumulative rx/tx: 0B / 0B
+Net[lo]: rx/tx: 1.8KB / 1.8KB, cumulative rx/tx: 195.1KB / 195.1KB
+Net[wlan0]: rx/tx: 1.3MB / 181.2KB, cumulative rx/tx: 267.6MB / 13.9MB
 ```	
