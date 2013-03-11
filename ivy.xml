@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ivy-module version="2.0">
+  <info organisation="org.jrenner.glances" module=""/>
+  <configurations>
+    <conf name="default"/>
+    <conf name="build" extends="default" visibility="private"/>
+    <conf name="test" extends="build" visibility="private"/>
+    <conf name="analysis" extends="build" visibility="private"/>
+  </configurations>
+  <dependencies>
+    <!-- Run -->
+    <dependency org="com.google.code.gson" name="gson" rev="2.2.2"/>
+    <dependency org="org.apache.xmlrpc" name="xmlrpc-client" rev="3.0" />
+  </dependencies>
+</ivy-module>

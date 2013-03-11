@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<project name="glances" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <!-- Project-specific configuration -->
+  <property name="artifactId" value="glances"/>
+  <property name="description" value="none"/>
+  <property name="version" value="0.1"/>
+  <property name="package.main" value="org.jrenner.glances"/>
+  <property name="main.class" value="${package.main}.Example"/>
+  <property name="base.name" value="${artifactId}-${version}"/>
+
+  <!-- Standard Directory Layout -->
+  <property name="src.dir" value="src"/>
+  <property name="test.dir" value="test"/>
+  <property name="build.dir" value="build"/>
+  <property name="dist.dir" value="dist"/>
+
+  <!-- Targets -->
+
+  <target name="resolve" description="Retrieve dependencies with Ivy.">
+    <ivy:resolve log="download-only"/>
+    <ivy:cachepath conf="build" pathid="build.classpath"/>
+    <ivy:cachepath conf="default" pathid="runtime.classpath"/>
+    <ivy:cachefileset conf="default" setid="runtime.fileset"/>
+    <ivy:cachepath conf="test" pathid="test.classpath"/>
+    <ivy:cachepath conf="analysis" pathid="analysis.classpath"/>
+  </target>
+
+  <target name="compile" depends="resolve" description="Compile all sources.">
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${build.dir}/classes"/>
+    <javac srcdir="${src.dir}" destdir="${build.dir}/classes"
+           optimize="on" debug="on" deprecation="on" includeantruntime="no">
+      <compilerarg value="-Xlint"/>
+      <classpath refid="build.classpath"/>
+    </javac>
+    <copy todir="${build.dir}/classes">
+      <fileset dir="${src.dir}" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+  <target name="jar" depends="compile"
+          description="Generate the jarfile distributable.">
+    <jar destfile="${dist.dir}/${base.name}.jar"
+         basedir="${build.dir}/classes">
+      <manifest>
+        <attribute name="Main-Class" value="${main.class}"/>
+      </manifest>
+    </jar>
+    <jar destfile="${dist.dir}/${base.name}-all.jar"
+         basedir="${build.dir}/classes">
+      <zipgroupfileset refid="runtime.fileset"/>
+      <manifest>
+        <attribute name="Main-Class" value="${main.class}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run" depends="compile" description="Run the application.">
+    <java classname="${main.class}" classpath="${build.dir}/classes" fork="yes">
+      <classpath refid="runtime.classpath"/>
+    </java>
+  </target>
+
+  <target name="clean" description="Delete all generated files.">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+    <delete file="cache.properties"/>
+  </target>
+</project>

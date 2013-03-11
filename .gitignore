@@ -10,3 +10,7 @@ libs/*
 # IntelliJ Idea
 *.iml
 *.idea
+
+# Ant
+build/
+dist/

@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Version: 0.2b
-Main-Class: org.jrenner.glances.Example
-
