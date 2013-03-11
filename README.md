@@ -42,7 +42,7 @@ public class Main {
             net.convertToBytes();
         }
         // Now we could access fields like 'net.rx' or 'net.interface_name'
-        // But let's just use the printData method
+        // But let's just use toString()
         for (NetworkInterface net : networkInterfaces) {
             System.out.println(net.toString())
         }
@@ -59,7 +59,7 @@ public class NetworkInterface {
     //...
 ```
 Every data structure also has a toString() method
-In the above example, we get the following output from running printData() on all three interfaces:
+In the above example, we get the following output from all three interfaces:
 ```
 Net[eth0]: rx/tx: 0B / 0B, cumulative rx/tx: 0B / 0B
 Net[lo]: rx/tx: 1.8KB / 1.8KB, cumulative rx/tx: 195.1KB / 195.1KB
