@@ -1,17 +1,21 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  Data structure for getNetwork() results<br>
  Data initially stored as bits.<br>
  Use convertToBytes() to convert
  */
 // TODO methods for returning one field in a formatted string i.e. "Rx: 1.76MB"
+    
+@Getter
 public class NetworkInterface {
-    public String interface_name;
-    public long rx;
-    public long tx;
-    public long cumulative_rx;
-    public long cumulative_tx;
+    private String interface_name;
+    private long rx;
+    private long tx;
+    private long cumulative_rx;
+    private long cumulative_tx;
     private boolean dataIsBytes = false;
 
     @Override
@@ -28,8 +32,9 @@ public class NetworkInterface {
     }
 
     private char getBitsOrBytesChar() {
-        if (isDataInBytes())
+        if (isDataInBytes()) {
             return 'B';
+        }
         return 'b';
     }
 
@@ -62,8 +67,9 @@ public class NetworkInterface {
     }
 
     public boolean isDataInBytes() {
-        if (dataIsBytes)
+        if (dataIsBytes) {
             return true;
+        }
         return false;
     }
 }

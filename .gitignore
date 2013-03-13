@@ -4,8 +4,8 @@
 *.jar
 *.war
 *.ear
-out/*
-libs/*
+out/
+libs/
 
 # IntelliJ Idea
 *.iml
@@ -14,3 +14,6 @@ libs/*
 # Ant
 build/
 dist/
+
+# Misc
+java_countlines.py

@@ -1,16 +1,20 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  Data structure for getFs()
  The numbers stored are in bytes
  */
+
+@Getter
 public class FileSystem {
-    public String mnt_point;
-    public String device_name;
-    public String fs_type;
-    public long used;
-    public long avail;
-    public long size;
+    private String mnt_point;
+    private String device_name;
+    private String fs_type;
+    private long used;
+    private long avail;
+    private long size;
 
     @Override
     public String toString() {

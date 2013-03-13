@@ -14,8 +14,9 @@ What does this library do?
 Read the specification of the Glances API:
 - https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
 
-How to use?
-- Get pre-packaged jar with dependencies included: [java-glances-0.2.jar](https://www.dropbox.com/s/pzroww8mfb8kfy0/java-glances-0.2.jar)
+Build
+- ant
+- Or get a [pre-packaged .jar](https://www.dropbox.com/s/c19yuj85clw0yx5/java-glances-0.3.jar) with dependencies included
 - Add as a library and follow the example below to initialize a Glances object
  
 Dependencies:

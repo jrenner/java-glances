@@ -1,17 +1,21 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  * Data structure for getMem()
  */
+
+@Getter
 public class Memory {
-    public long inactive;
-    public long cached;
-    public long used;
-    public long buffers;
-    public long active;
-    public long total;
-    public double percent; // percent in usage
-    public long free;
+    private long inactive;
+    private long cached;
+    private long used;
+    private long buffers;
+    private long active;
+    private long total;
+    private double percent; // percent in usage
+    private long free;
 
     @Override
     public String toString() {

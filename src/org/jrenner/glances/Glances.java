@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.*;
 
 public class Glances {
-    private XmlRpcClientConfigImpl config;
     private XmlRpcClient client;
     private static Object[] empty_params = new Object[]{};
     private static Gson gson;
@@ -31,8 +30,9 @@ public class Glances {
     }
 
 
-    public Glances (URL glancesServerURL) {
-        String urlString = glancesServerURL.toString();
+    public Glances (URL argURL) throws MalformedURLException {
+        URL glancesServerURL = new URL(argURL.toString());
+        String urlString = argURL.toString();
         if (!urlString.endsWith("RPC2")) {
             String addition = null;
             // we handle both "http://example.com:61209/" and "http://example.com:61209"
@@ -41,13 +41,9 @@ public class Glances {
             } else {
                 addition = "/RPC2";
             }
-            try {
-                glancesServerURL = new URL(glancesServerURL.toString() + addition);
-            } catch (MalformedURLException e) {
-                error(e);
-            }
+            glancesServerURL = new URL(argURL.toString() + addition);
         }
-        config = new XmlRpcClientConfigImpl();
+        XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
         System.out.println("Connecting to glances server: '" + glancesServerURL + "'");
         config.setServerURL(glancesServerURL);
         client = new XmlRpcClient();
@@ -88,7 +84,7 @@ public class Glances {
         } catch (XmlRpcException e) {
             error(e);
         }
-        if(result == null) {
+        if(result == null) { //TODO logging
             String warnMsg = String.format(
                     "WARNING: executeAPICall(\"%s\") returning null", apiCall);
             print(warnMsg);
@@ -103,8 +99,7 @@ public class Glances {
         String netJson = executeAPICall("getNetwork");
         // Things are much easier if we just get the json into an array first
         NetworkInterface[] tempArray = gson.fromJson(netJson, NetworkInterface[].class);
-        List<NetworkInterface> interfaces =  Arrays.asList(tempArray);
-        return interfaces;
+        return Arrays.asList(tempArray);
     }
 
     public int getCore() {
@@ -150,16 +145,14 @@ public class Glances {
 
     public Limits getAllLimits() {
         String limitsJson = executeAPICall("getAllLimits");
-        Limits limits = gson.fromJson(limitsJson, Limits.class);
-        return limits;
+        return gson.fromJson(limitsJson, Limits.class);
     }
 
     public ProcessCount getProcessCount() {
         String pcountJson = executeAPICall("getProcessCount");
         // test statuses
         pcountJson = "{\"zombie\": 2, \"running\": 1, \"total\": 222, \"disk sleep\": 1, \"sleeping\": 220}";
-        ProcessCount processCount = gson.fromJson(pcountJson, ProcessCount.class);
-        return processCount;
+        return gson.fromJson(pcountJson, ProcessCount.class);
     }
 
     public List<Process> getProcessList() {

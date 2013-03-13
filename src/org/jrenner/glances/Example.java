@@ -18,7 +18,11 @@ public class Example {
         } catch (MalformedURLException e) {
             print(e.toString());
         }
-        glances = new Glances(serverURL);
+        try {
+            glances = new Glances(serverURL);
+        } catch (MalformedURLException e) {
+            System.out.println(e.toString());
+        }
 
         // run tests
         print("Running tests, please make sure glances.py is running " +
@@ -115,8 +119,9 @@ public class Example {
         print("Testing getProcessList()");
         List<Process> pList = glances.getProcessList();
         for (Process proc : pList) {
-            if (proc.memory_percent > 3) // only print non-trivial processes
+            if (proc.getMemory_percent() > 3) {// only print non-trivial processes
                 print(proc.toString());
+            }
         }
     }
 

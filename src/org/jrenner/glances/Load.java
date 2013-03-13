@@ -1,12 +1,16 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  * Data structure for getLoad()
  */
+
+@Getter
 public class Load {
-    public double min1;
-    public double min5;
-    public double min15;
+    private double min1;
+    private double min5;
+    private double min15;
 
     @Override
     public String toString() {

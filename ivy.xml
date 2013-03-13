@@ -11,6 +11,7 @@
     <!-- Run -->
     <dependency org="com.google.code.gson" name="gson" rev="2.2.2"/>
     <dependency org="org.apache.xmlrpc" name="xmlrpc-client" rev="3.0" />
+    <dependency org="org.projectlombok" name="lombok" rev="0.11.6" />
 
     <!-- Static Analysis -->
     <dependency org="com.puppycrawl.tools" name="checkstyle" rev="5.5"

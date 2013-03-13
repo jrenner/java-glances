@@ -1,13 +1,17 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  * Data structure for getMemSwap()
  */
+
+@Getter
 public class MemorySwap {
-    public long total;
-    public float percent;
-    public long free;
-    public long used;
+    private long total;
+    private float percent;
+    private long free;
+    private long used;
 
     @Override
     public String toString() {

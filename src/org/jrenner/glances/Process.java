@@ -1,5 +1,7 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  * Data structure for getProcessList()
  */
@@ -10,18 +12,20 @@ package org.jrenner.glances;
         "io_counters": [2825959424, 12815888384, 2825959424, 12815646720, 1],
         "cmdline": "chromium-browser", "memory_info": [301707264, 1122258944],
         "nice": 0}  */
+    
+@Getter
 public class Process {
-    public String username;
-    public String status;
-    public double[] cpu_times;
-    public String name;
-    public double memory_percent;
-    public double cpu_percent;
-    public int pid;
-    public long[] io_counters;
-    public String cmdline;
-    public long[] memory_info;
-    public long nice;
+    private String username;
+    private String status;
+    private double[] cpu_times;
+    private String name;
+    private double memory_percent;
+    private double cpu_percent;
+    private int pid;
+    private long[] io_counters;
+    private String cmdline;
+    private long[] memory_info;
+    private long nice;
 
     @Override
     public String toString() {

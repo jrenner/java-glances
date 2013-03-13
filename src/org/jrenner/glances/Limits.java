@@ -1,36 +1,41 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Data structure for getAllLimits()
  */
+
+@Getter
 public class Limits {
     // all arrays have a length of 3
-    public int[] STD;
-    public int[] CPU_IOWAIT;
-    public int[] FS;
-    public float[] LOAD;
-    public int[] CPU_SYSTEM;
-    public int[] PROCESS_MEM;
-    public int[] TEMP;
-    public int[] MEM;
-    public int[] CPU_USER;
-    public int[] PROCESS_CPU;
-    public int[] SWAP;
+    private int[] STD;
+    private int[] CPU_IOWAIT;
+    private int[] FS;
+    private float[] LOAD;
+    private int[] CPU_SYSTEM;
+    private int[] PROCESS_MEM;
+    private int[] TEMP;
+    private int[] MEM;
+    private int[] CPU_USER;
+    private int[] PROCESS_CPU;
+    private int[] SWAP;
     private Map<int[], String> limitNames;
 
     @Override
     public String toString() {
         initializeLimitNames();
-        String text = "Limits:";
+        StringBuilder builder = new StringBuilder();
+        builder.append("Limits:");
         for (int[] limit : limitNames.keySet()) {
-            text += "\n\t" + getLimitString(limit);
+            builder.append("\n\t" + getLimitString(limit));
         }
         // edge case of float[]
-        text += "\n\t" + getLimitString(LOAD);
-        return text;
+        builder.append("\n\t" + getLimitString(LOAD));
+        return builder.toString();
     }
 
     private void initializeLimitNames() {

@@ -1,13 +1,17 @@
 package org.jrenner.glances;
 
+import lombok.Getter;
+
 /**
  * Data structure for getProcessCount()
  */
+
+@Getter
 public class ProcessCount {
-    public int zombie;
-    public int running;
-    public int total;
-    public int sleeping;
+    private int zombie;
+    private int running;
+    private int total;
+    private int sleeping;
     // TODO figure out how to handle such things as "disk sleep" and other statuses
 
     public String toString() {
