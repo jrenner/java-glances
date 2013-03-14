@@ -15,8 +15,8 @@ Read the specification of the Glances API:
 - https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
 
 Build
-- ant
-- Or get a [pre-packaged .jar](https://www.dropbox.com/s/c19yuj85clw0yx5/java-glances-0.3.jar) with dependencies included
+- (TODO: create ant or maven build)
+- Or get a [pre-packaged .jar](https://www.dropbox.com/s/wd9zwd78sez0hzm/java-glances-0.4.jar) with dependencies included
 - Add as a library and follow the example below to initialize a Glances object
  
 Dependencies:
