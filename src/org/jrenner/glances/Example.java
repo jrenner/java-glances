@@ -47,9 +47,6 @@ public class Example {
         print("Testing getNetwork():");
         List<NetworkInterface> networkInterfaces = glances.getNetwork();
         for (NetworkInterface net : networkInterfaces) {
-            net.convertToBytes();
-        }
-        for (NetworkInterface net : networkInterfaces) {
             print(net.toString());
         }
     }

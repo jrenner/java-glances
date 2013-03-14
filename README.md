@@ -38,11 +38,7 @@ public class Main {
         glances = new Glances(serverURL);
         // retrieve network stats through API call
         List<NetworkInterface> networkInterfaces = glances.getNetwork();
-        for (NetworkInterface net : networkInterfaces) {
-            // We prefer to see bytes, not the default bits
-            net.convertToBytes();
-        }
-        // Now we could access fields like 'net.rx' or 'net.interface_name'
+        // Now we could use getters to access individual data fields
         // But let's just use toString()
         for (NetworkInterface net : networkInterfaces) {
             System.out.println(net.toString())
