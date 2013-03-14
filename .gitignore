@@ -17,3 +17,4 @@ dist/
 
 # Misc
 java_countlines.py
+build_jar.py

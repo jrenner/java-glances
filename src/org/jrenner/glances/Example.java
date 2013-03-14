@@ -119,7 +119,7 @@ public class Example {
         print("Testing getProcessList()");
         List<Process> pList = glances.getProcessList();
         for (Process proc : pList) {
-            if (proc.getMemory_percent() > 3) {// only print non-trivial processes
+            if (proc.getMemoryPercent() > 3) {// only print non-trivial processes
                 print(proc.toString());
             }
         }
