@@ -44,17 +44,8 @@ public class Main {
         }
     }
 ```
-The data can be accessed directly as fields in the data structure.
-```java
-public class NetworkInterface {
-    public String interface_name;
-    public long rx;
-    public long tx;
-    public long cumulative_rx;
-    public long cumulative_tx;
-    //...
-```
-Every data structure also has a toString() method
+The data can be accessed through Getter and Setter methods.
+Every data structure also has a toString() method.
 In the above example, we get the following output from all three interfaces:
 ```
 Net[eth0]: rx/tx: 0B / 0B, cumulative rx/tx: 0B / 0B
