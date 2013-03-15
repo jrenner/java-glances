@@ -16,8 +16,9 @@ public class Glances {
     private static Map<String, Long> units;
     private static List<String> orderedUnits;
 
-    /** Default instantiation not allowed
-     *  please use Glances(URL glancesServerURL)
+    /**
+     * Default instantiation not allowed
+     * please use Glances(URL glancesServerURL)
      */
     private Glances() {
     }
@@ -25,18 +26,19 @@ public class Glances {
     private void error(Exception e) {
         System.out.println("ERROR: " + e.toString());
     }
+
     private void print(String text) {
         System.out.println(text);
     }
 
 
-    public Glances (URL argURL) throws MalformedURLException {
+    public Glances(URL argURL) throws MalformedURLException {
         URL glancesServerURL = new URL(argURL.toString());
         String urlString = argURL.toString();
         if (!urlString.endsWith("RPC2")) {
             String addition = null;
             // we handle both "http://example.com:61209/" and "http://example.com:61209"
-            if(urlString.endsWith("/")) {
+            if (urlString.endsWith("/")) {
                 addition = "RPC2";
             } else {
                 addition = "/RPC2";
@@ -68,23 +70,24 @@ public class Glances {
         orderedUnits.add("K");
 
 
-}
+    }
 
     /**
      * Use this method to directly access the JSON returned by calls to Glances server
      * NOTE: some methods like system.listMethods do not work
      * only methods that return Strings will work currently
+     *
      * @param apiCall a valid Glances API call like "getNetwork"
      * @return the JSON string or null
      */
     private String executeAPICall(String apiCall) {
         String result = null;
         try {
-        result = (String) client.execute(apiCall, empty_params);
+            result = (String) client.execute(apiCall, empty_params);
         } catch (XmlRpcException e) {
             error(e);
         }
-        if(result == null) { //TODO logging
+        if (result == null) { //TODO logging
             String warnMsg = String.format(
                     "WARNING: executeAPICall(\"%s\") returning null", apiCall);
             print(warnMsg);
@@ -92,8 +95,9 @@ public class Glances {
         return result;
     }
 
-    /** Net traffic bits
-     *  use NetworkInterface.convertToBytes() to convert
+    /**
+     * Net traffic bits
+     * use NetworkInterface.convertToBytes() to convert
      */
     public List<NetworkInterface> getNetwork() {
         String netJson = executeAPICall("getNetwork");
@@ -169,7 +173,7 @@ public class Glances {
         // TODO let's do this better
         if (sensorsJson.equals("[]")) {
             print("getSensors() - No data returned, please see documentation. as of glances.py 1.6 sensor data" +
-                " is only available on linux, and when enabled");
+                    " is only available on linux, and when enabled");
         }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
@@ -188,20 +192,19 @@ public class Glances {
      * That must be handled independently
      * NOTE: Does not handle units larger than exabytes(exabits).
      * That would require BigDecimal (TODO?)
+     *
      * @param val
      * @return a nice formatted String with the proper unit attached
      */
     public static String autoUnit(double val) {
-    // This could be done a loop by writing a comparator
-    // But I think that is needless complexity
-    for (String unit: orderedUnits) {
-        long unitSize = units.get(unit);
-        if(val > unitSize) {
-            val /= unitSize;
-            return String.format("%.1f%s", val, unit);
+        for (String unit : orderedUnits) {
+            long unitSize = units.get(unit);
+            if (val > unitSize) {
+                val /= unitSize;
+                return String.format("%.2f%s", val, unit);
+            }
         }
-    }
-    return String.format("%.0f", val);
+        return String.format("%.0f", val);
     }
 
 

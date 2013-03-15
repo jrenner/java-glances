@@ -9,6 +9,7 @@ package org.jrenner.glances;
 public class NetworkInterface {
 
     private String interface_name;
+    private float time_since_update;
     private long rx;
     private long tx;
     private long cumulative_rx;
@@ -17,11 +18,11 @@ public class NetworkInterface {
     @Override
     public String toString() {
         char suffix = 'B';
-        String rxText = Glances.autoUnit(rx) + suffix;
-        String txText = Glances.autoUnit(tx) + suffix;
-        String cumulative_rxText = Glances.autoUnit(cumulative_rx) + suffix;
-        String cumulative_txText = Glances.autoUnit(cumulative_tx) + suffix;
-        String text = String.format("Net[%s]: rx/tx: %s / %s, cumulative rx/tx: %s / %s",
+        String rxText = Glances.autoUnit(getRxPerSecond()) + suffix;
+        String txText = Glances.autoUnit(getTxPerSecond()) + suffix;
+        String cumulative_rxText = Glances.autoUnit(getCumulativeRx()) + suffix;
+        String cumulative_txText = Glances.autoUnit(getCumulativeTx()) + suffix;
+        String text = String.format("Net[%s]: Rx/s: %s Tx/s: %s TOTAL: Rx/Tx %s / %s",
                 interface_name, rxText, txText, cumulative_rxText, cumulative_txText);
         return text;
     }
@@ -30,12 +31,27 @@ public class NetworkInterface {
         return this.interface_name;
     }
 
-    /** @return bytes received per second */
+    /** @return time in seconds since last update */
+    public float getTimeSinceUpdate() {
+        return this.time_since_update;
+    }
+
+    /** @return bytes received per second since last update*/
+    public long getRxPerSecond() {
+        return (long) (getRx() / getTimeSinceUpdate());
+    }
+
+    /** @return bytes sent per second since last update*/
+    public long getTxPerSecond() {
+        return (long) (getTx() / getTimeSinceUpdate());
+    }
+
+    /** @return bytes received since last update*/
     public long getRx() {
         return this.rx;
     }
 
-    /** @return bytes sent per seconds */
+    /** @return bytes sent since last update */
     public long getTx() {
         return this.tx;
     }

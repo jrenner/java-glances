@@ -3,7 +3,7 @@ java-glances
 
 <b><i>WARNING</i>: This library is new and and things may change over the next few days/weeks</b>
 
-A Java library for the Glances XML RPC API<br>
+A Java library for the Glances XML/RPC API<br>
 
 What is Glances?
 - [Glances](https://github.com/nicolargo/glances.git) is a CLI system monitor written in Python
@@ -14,10 +14,9 @@ What does this library do?
 Read the specification of the Glances API:
 - https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
 
-Build
+Build or Download .jar
 - (TODO: create ant or maven build)
-- Or get a [pre-packaged .jar](https://www.dropbox.com/s/wd9zwd78sez0hzm/java-glances-0.4.jar) with dependencies included
-- Add as a library and follow the example below to initialize a Glances object
+- [get a pre-packaged .jar](https://www.dropbox.com/s/dfg8x7g1lw5i4qm/java-glances-0.5.jar) with dependencies included
  
 Dependencies:
 - [Apache XMLRPC](http://ws.apache.org/xmlrpc/)

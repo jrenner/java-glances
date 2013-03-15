@@ -28,7 +28,7 @@ public class Example {
         print("Running tests, please make sure glances.py is running " +
                 " on localhost with arg '-s' on localhost:61209");
         testNetwork();
-        testCpu();
+/*        testCpu();
         testDiskIO();
         testFs();
         testLoad();
@@ -39,7 +39,7 @@ public class Example {
         testProcessCount();
         testProcessList();
         testSensors();
-        testSystem();
+        testSystem();*/
 
     }
 
