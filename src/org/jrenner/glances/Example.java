@@ -2,6 +2,8 @@ package org.jrenner.glances;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public class Example {
@@ -28,7 +30,7 @@ public class Example {
         print("Running tests, please make sure glances.py is running " +
                 " on localhost with arg '-s' on localhost:61209");
         testNetwork();
-/*        testCpu();
+        testCpu();
         testDiskIO();
         testFs();
         testLoad();
@@ -39,7 +41,7 @@ public class Example {
         testProcessCount();
         testProcessList();
         testSensors();
-        testSystem();*/
+        testSystem();
 
     }
 
@@ -96,8 +98,14 @@ public class Example {
 
     public static void testNow() {
         print("Testing getNow()");
-        String now = glances.getNow();
-        print(now);
+        Date now = null;
+        try {
+            now = glances.getNow();
+        } catch (ParseException e) {
+            print(e.toString());
+            System.exit(1);
+        }
+        print("[current time]: " + now.toString());
     }
 
     public static void testLimits() {

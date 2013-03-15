@@ -7,6 +7,9 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Glances {
@@ -142,9 +145,12 @@ public class Glances {
         return gson.fromJson(swapJson, MemorySwap.class);
     }
 
-    public String getNow() {
-        //TODO parse into a Date object?
-        return executeAPICall("getNow");
+    public Date getNow() throws ParseException {
+        String result = executeAPICall("getNow");
+        // strip quotes
+        result = result.replace("\"", "");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+        return df.parse(result);
     }
 
     public Limits getAllLimits() {
