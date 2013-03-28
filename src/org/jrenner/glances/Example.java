@@ -2,7 +2,10 @@ package org.jrenner.glances;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +30,31 @@ public class Example {
         }
 
         // run tests
-        print("Running tests, please make sure glances.py is running " +
-                " on localhost with arg '-s' on localhost:61209");
+        /*print("Running tests, please make sure glances.py is running " +
+                " on localhost with arg '-s' on localhost:61209"); */
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date();
+        System.out.println("Time: " + dateFormat.format(date));
+        //testNetwork();
+        //testCpu();
+        //testDiskIO();
+        //testFs();
+        //testLoad();
+        //testMem();
+        //testMemSwap();
+        //testNow();
+        //testLimits();
+        //testProcessCount();
+        //testProcessList();
+        //testSensors();
+        //testSystem();
+        testHardDriveTemps();
+
+        //runAllTests();
+
+    }
+
+    public static void runAllTests() {
         testNetwork();
         testCpu();
         testDiskIO();
@@ -42,7 +68,7 @@ public class Example {
         testProcessList();
         testSensors();
         testSystem();
-
+        testHardDriveTemps();
     }
 
     public static void testNetwork() {
@@ -142,6 +168,15 @@ public class Example {
         print("Testing getSystem()");
         SystemInfo sysInfo = glances.getSystem();
         print(sysInfo.toString());
+    }
+
+    public static void testHardDriveTemps() {
+        print("Testing getHardDriveTemps()");
+        List<HardDriveTemp> hddTemps = glances.getHardDriveTemps();
+        print("HDD Temp: " + hddTemps);
+        for (HardDriveTemp hddTemp : hddTemps) {
+            print(hddTemp.toString());
+        }
     }
 
 }

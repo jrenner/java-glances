@@ -147,6 +147,9 @@ public class Glances {
 
     public Date getNow() throws ParseException {
         String result = executeAPICall("getNow");
+        if (result == null) {
+            return null;
+        }
         // strip quotes
         result = result.replace("\"", "");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
@@ -188,6 +191,12 @@ public class Glances {
     public SystemInfo getSystem() {
         String systemJson = executeAPICall("getSystem");
         return gson.fromJson(systemJson, SystemInfo.class);
+    }
+
+    public List<HardDriveTemp> getHardDriveTemps() {
+        String hddJson = executeAPICall("getHDDTemp");
+        HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
+        return Arrays.asList(tempArray);
     }
 
     /**

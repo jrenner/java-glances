@@ -8,25 +8,41 @@ package org.jrenner.glances;
 public class DiskIO {
 
     private String disk_name;
-    private int read_bytes;
-    private int write_bytes;
+    // bytes since last update, not total bytes
+    private long read_bytes;
+    private long write_bytes;
+    // used to calc data over time
+    private float time_since_update;
 
     @Override
     public String toString() {
-        String writeText = Glances.autoUnit(write_bytes) + "B";
-        String readText = Glances.autoUnit(read_bytes) + "B";
-        return String.format("Disk[%s]: write: %s, read: %s", disk_name, writeText, readText);
+        String writeText = Glances.autoUnit(getBytesWrittenPerSec()) + "B";
+        String readText = Glances.autoUnit(getBytesReadPerSec()) + "B";
+        return String.format("Disk[%s]: write/s: %s, read/s: %s time_since_update: %.3f",
+                disk_name, writeText, readText, time_since_update);
     }
 
     public String getDiskName() {
         return this.disk_name;
     }
 
-    public int getReadBytes() {
+    public long getBytesRead() {
         return this.read_bytes;
     }
 
-    public int getWriteBytes() {
+    public long getBytesWritten() {
         return this.write_bytes;
+    }
+
+    public long getBytesReadPerSec() {
+        return (long) (getBytesRead() / getTimeSinceUpdate());
+    }
+
+    public long getBytesWrittenPerSec() {
+        return (long) (getBytesWritten() / getTimeSinceUpdate());
+    }
+
+    public float getTimeSinceUpdate() {
+        return time_since_update;
     }
 }

@@ -20,15 +20,25 @@ public class Process {
     private double memory_percent;
     private double cpu_percent;
     private int pid;
+    /*io_counters:
+     * [read_bytes, write_bytes, read_bytes_old, write_bytes_old, io_tag]
+     * If io_tag = 0 > Access denied
+     * If io_tag = 1 > No access denied (display the IO rate) */
     private long[] io_counters;
     private String cmdline;
     private long[] memory_info;
     private long nice;
+    private float time_since_update;  // to be used with io_counters to calc data per second
 
     @Override
     public String toString() {
-        String text = String.format("Process: (pid:%d) %s\n\tusername: %s, status: %s, ", pid, name, username, status);
-        text += String.format("memPercent: %.0f, cpuPercent: %.0f ", memory_percent, cpu_percent);
+        String text = String.format("Process: (pid:%d) %s\n\tusername: %s, status: %s",
+            pid, name, username, status);
+            text += String.format(", memPercent: %.0f, cpuPercent: %.0f",
+            memory_percent, cpu_percent);
+            text += String.format(", diskIO/s R/W: %s / %s",
+            Glances.autoUnit(getBytesReadPerSec()),
+            Glances.autoUnit(getBytesWrittenPerSec()));
         return text;
     }
 
@@ -74,5 +84,33 @@ public class Process {
 
     public long getNice() {
         return this.nice;
+    }
+
+    public float getTimeSinceUpdate() {
+        return time_since_update;
+    }
+
+    public long getTotalBytesRead() {
+        return io_counters[0];
+    }
+
+    public long getTotalBytesWritten() {
+        return io_counters[1];
+    }
+
+    public long getBytesReadSinceUpdate() {
+        return io_counters[0] - io_counters[2];
+    }
+
+    public long getBytesWrittenSinceUpdate() {
+        return io_counters[1] - io_counters[3];
+    }
+
+    public long getBytesReadPerSec() {
+        return (long) (getBytesReadSinceUpdate() / getTimeSinceUpdate());
+    }
+
+    public long getBytesWrittenPerSec() {
+        return (long) (getBytesWrittenSinceUpdate() / getTimeSinceUpdate());
     }
 }
