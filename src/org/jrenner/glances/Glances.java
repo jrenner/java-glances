@@ -177,6 +177,7 @@ public class Glances {
         if (limitsJson == null) {
             return null;
         }
+        print("LIMITS:\n" + limitsJson);
         return gson.fromJson(limitsJson, Limits.class);
     }
 
@@ -185,7 +186,6 @@ public class Glances {
         if (pcountJson == null || pcountJson.equals("0")) {
             return null;
         }
-        print("Json: " + pcountJson);
         return gson.fromJson(pcountJson, ProcessCount.class);
     }
 

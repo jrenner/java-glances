@@ -22,6 +22,7 @@ public class Limits {
     private int[] CPU_USER;
     private int[] PROCESS_CPU;
     private int[] SWAP;
+    private int[] HDDTEMP;
     private Map<int[], String> limitNames;
 
     @Override
@@ -51,6 +52,7 @@ public class Limits {
             limitNames.put(CPU_USER, "CPU_USER");
             limitNames.put(PROCESS_CPU, "PROCESS_CPU");
             limitNames.put(SWAP, "SWAP");
+            limitNames.put(HDDTEMP, "HDDTEMP");
         }
     }
 
@@ -74,10 +76,11 @@ public class Limits {
      * get a String in the form of "CPU_IOWAIT: [30, 50, 70]"<br>
      * that shows the particular limit.
      *
+     * this float[] version exists just for the edge case of LOAD
+     *
      * @param limit a field in Limits data structure
      */
     public String getLimitString(float[] limit) {
-        // this exists just for the edge case of float[] LOAD
         if (limit.equals(LOAD)) {
             String name = "LOAD";
             return String.format("%s: [%.2f, %.2f, %.2f]", name, limit[0], limit[1], limit[2]);
@@ -127,5 +130,9 @@ public class Limits {
 
     public int[] getSwap() {
         return this.SWAP;
+    }
+
+    public int[] getHardDriveTemp() {
+        return this.HDDTEMP;
     }
 }
