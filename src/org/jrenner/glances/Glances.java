@@ -26,10 +26,6 @@ public class Glances {
     private Glances() {
     }
 
-    private void error(Exception e) {
-        System.out.println("ERROR: " + e.toString());
-    }
-
     private void print(String text) {
         System.out.println(text);
     }
@@ -88,12 +84,7 @@ public class Glances {
         try {
             result = (String) client.execute(apiCall, empty_params);
         } catch (XmlRpcException e) {
-            error(e);
-        }
-        if (result == null) { //TODO logging
-            String warnMsg = String.format(
-                    "WARNING: executeAPICall(\"%s\") returning null", apiCall);
-            print(warnMsg);
+            print("ERROR: " + apiCall + " - " + e.getMessage());
         }
         return result;
     }
@@ -102,46 +93,71 @@ public class Glances {
      * Net traffic bits
      * use NetworkInterface.convertToBytes() to convert
      */
-    public List<NetworkInterface> getNetwork() {
+    public List<NetworkInterface> getNetwork()  {
         String netJson = executeAPICall("getNetwork");
+        if (netJson == null) {
+            return null;
+        }
         // Things are much easier if we just get the json into an array first
         NetworkInterface[] tempArray = gson.fromJson(netJson, NetworkInterface[].class);
         return Arrays.asList(tempArray);
     }
 
-    public int getCore() {
-        return gson.fromJson(executeAPICall("getCore"), Integer.class);
+    public Integer getCore() {
+        String coreJson = executeAPICall("getCore");
+        if (coreJson == null) {
+            return null;
+        }
+        return gson.fromJson(coreJson, Integer.class);
     }
 
     public Cpu getCpu() {
         String cpuJson = executeAPICall("getCpu");
+        if (cpuJson == null) {
+            return null;
+        }
         return gson.fromJson(cpuJson, Cpu.class);
     }
 
     public List<DiskIO> getDiskIO() {
         String diskJson = executeAPICall("getDiskIO");
+        if (diskJson == null) {
+            return null;
+        }
         DiskIO[] tempArray = gson.fromJson(diskJson, DiskIO[].class);
         return Arrays.asList(tempArray);
     }
 
     public List<FileSystem> getFs() {
         String fsJson = executeAPICall("getFs");
+        if (fsJson == null) {
+            return null;
+        }
         FileSystem[] tempArray = gson.fromJson(fsJson, FileSystem[].class);
         return Arrays.asList(tempArray);
     }
 
     public Load getLoad() {
         String loadJson = executeAPICall("getLoad");
+        if (loadJson == null) {
+            return null;
+        }
         return gson.fromJson(loadJson, Load.class);
     }
 
     public Memory getMem() {
         String memJson = executeAPICall("getMem");
+        if (memJson == null) {
+            return null;
+        }
         return gson.fromJson(memJson, Memory.class);
     }
 
     public MemorySwap getMemSwap() {
         String swapJson = executeAPICall("getMemSwap");
+        if (swapJson == null) {
+            return null;
+        }
         return gson.fromJson(swapJson, MemorySwap.class);
     }
 
@@ -158,31 +174,41 @@ public class Glances {
 
     public Limits getAllLimits() {
         String limitsJson = executeAPICall("getAllLimits");
+        if (limitsJson == null) {
+            return null;
+        }
         return gson.fromJson(limitsJson, Limits.class);
     }
 
     public ProcessCount getProcessCount() {
         String pcountJson = executeAPICall("getProcessCount");
-        // test statuses
-        pcountJson = "{\"zombie\": 2, \"running\": 1, \"total\": 222, \"disk sleep\": 1, \"sleeping\": 220}";
+        if (pcountJson == null || pcountJson.equals("0")) {
+            return null;
+        }
+        print("Json: " + pcountJson);
         return gson.fromJson(pcountJson, ProcessCount.class);
     }
 
     public List<Process> getProcessList() {
         String plistJson = executeAPICall("getProcessList");
+        if (plistJson == null) {
+            return null;
+        }
         Process[] tempArray = gson.fromJson(plistJson, Process[].class);
         return Arrays.asList(tempArray);
     }
 
     /**
-     * As of Glances 1.6, only avaiable on Linux when run with glances.py -e
+     * As of Glances 1.6, only available on Linux when run with glances.py -e
      */
     public List<Sensor> getSensors() {
         String sensorsJson = executeAPICall("getSensors");
         // TODO let's do this better
+        if (sensorsJson == null) {
+            return null;
+        }
         if (sensorsJson.equals("[]")) {
-            print("getSensors() - No data returned, please see documentation. as of glances.py 1.6 sensor data" +
-                    " is only available on linux, and when enabled");
+            print("No data returned, were sensors enabled?");
         }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
@@ -190,11 +216,21 @@ public class Glances {
 
     public SystemInfo getSystem() {
         String systemJson = executeAPICall("getSystem");
+        if (systemJson == null) {
+            return null;
+        }
         return gson.fromJson(systemJson, SystemInfo.class);
     }
 
     public List<HardDriveTemp> getHardDriveTemps() {
         String hddJson = executeAPICall("getHDDTemp");
+        if (hddJson == null) {
+            return null;
+        }
+        if (hddJson.equals("[]")) {
+            print("No data returned, were hard drive temps enabled?\n\t" +
+                    "is the hddtemp daemon running?");
+        }
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
         return Arrays.asList(tempArray);
     }
@@ -206,10 +242,9 @@ public class Glances {
      * since it has no knowledge of that
      * That must be handled independently
      * NOTE: Does not handle units larger than exabytes(exabits).
-     * That would require BigDecimal (TODO?)
      *
      * @param val
-     * @return a nice formatted String with the proper unit attached
+     * @return a nice formatted String with the proper unit attached (i.e. "3.42M", "1.23G")
      */
     public static String autoUnit(double val) {
         for (String unit : orderedUnits) {

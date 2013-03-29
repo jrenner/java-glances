@@ -15,14 +15,19 @@ Read the specification of the Glances API:
 - https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To
 
 Build or Download .jar
+- grab the pre-packaged .jar with all dependencies from the [/bin](/bin) directory
 - (TODO: create ant or maven build)
-- [get a pre-packaged .jar](https://www.dropbox.com/s/dfg8x7g1lw5i4qm/java-glances-0.5.jar) with dependencies included
  
 Dependencies:
 - [Apache XMLRPC](http://ws.apache.org/xmlrpc/)
 - [Google gson](https://code.google.com/p/google-gson/)
 
-Example usage:
+The .jar in the [/bin](/bin) folder can be used to test your server, even if you have no knowledge of Java.<br>
+try "java -jar (jarfile) <host> <port>" from the command line <br>
+if you are running the Glances server at the default localhost:61209 location, just <br>
+"java -jar (jarfile)" should be enough.
+
+Example usage (not guaranteed to be up to date):
 ```java
 public class Main {
     private static Glances glances; // this library's API object
