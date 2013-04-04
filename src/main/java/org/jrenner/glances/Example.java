@@ -1,10 +1,7 @@
 package org.jrenner.glances;
 
-import org.apache.xmlrpc.XmlRpcException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

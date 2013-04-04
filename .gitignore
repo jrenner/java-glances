@@ -1,19 +1,11 @@
-*.class
+# Ignore all dotfiles...
+.*
+# except for .gitignore
+!.gitignore
 
-# Package Files #
-*.war
-*.ear
-out/
-libs/
-
-# IntelliJ Idea
+!bin
+target
 *.iml
-*.idea
-
-# Ant
-build/
-dist/
-
-# Misc
-java_countlines.py
-build_jar.py
+*.ipr
+*.iws
+*.iwr
