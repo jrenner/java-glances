@@ -1,10 +1,10 @@
 package org.jrenner.glances;
 
-import org.apache.xmlrpc.XmlRpcException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,14 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 public class Example {
+    private static Logger logger = LoggerFactory.getLogger(Example.class);
+
     private static Glances glances;
 
-    private static void print(String text) {
-        System.out.println(text);
-    }
-
     private static void usage() {
-        System.out.println("Usage: command <address> <port>\ndefault: localhost:61209");
+        logger.info("Usage: command <address> <port>\ndefault: localhost:61209");
     }
 
     public static void main(String[] args) {
@@ -42,35 +40,20 @@ public class Example {
         try {
             serverURL = new URL("http://" + host + ":" + port);
         } catch (MalformedURLException e) {
-            print(e.toString());
+            logger.info(e.toString());
         }
         try {
             glances = new Glances(serverURL);
         } catch (MalformedURLException e) {
-            System.out.println(e.toString());
+            logger.error(e.getMessage(), e);
         }
 
         // run tests
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Date date = new Date();
-        System.out.println("Time: " + dateFormat.format(date));
-        //testNetwork();
-        //testCpu();
-        //testDiskIO();
-        //testFs();
-        //testLoad();
-        //testMem();
-        //testMemSwap();
-        //testNow();
-        //testLimits();
-        //testProcessCount();
-        //testProcessList();
-        //testSensors();
-        //testSystem();
-        //testHardDriveTemps();
-
+        logger.info("Time: {}", dateFormat.format(date));
+        logger.info("-----------------------------");
         runAllTests();
-
     }
 
     public static void runAllTests() {
@@ -91,82 +74,88 @@ public class Example {
     }
 
     public static void testNetwork() {
-        print("Testing getNetwork():");
+        logger.info("Testing getNetwork():");
         List<NetworkInterface> networkInterfaces = glances.getNetwork();
         if (networkInterfaces == null) {
             return;
         }
         for (NetworkInterface net : networkInterfaces) {
-            print(net.toString());
+            logger.info(net.toString());
         }
+        logger.info("-----------------------------");
     }
 
     public static void testCpu() {
-        print("Testing getCore() and getCpu()");
+        logger.info("Testing getCore() and getCpu()");
         Integer cores = glances.getCore();
         if (cores == null) {
             return;
         }
-        print("Cores: " + cores);
+        logger.info("Cores: " + cores);
         Cpu cpu = glances.getCpu();
         if (cpu == null) {
             return;
         }
-        print(cpu.toString());
-
+        logger.info(cpu.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testDiskIO() {
-        print("Testing getDiskIO()");
+        logger.info("Testing getDiskIO()");
         List<DiskIO> disks = glances.getDiskIO();
         if (disks == null) {
             return;
         }
         for (DiskIO disk : disks) {
-            print(disk.toString());
+            logger.info(disk.toString());
         }
+        logger.info("-----------------------------");
     }
 
     public static void testFs() {
-        print("Testing getFs()");
+        logger.info("Testing getFs()");
         List<FileSystem> fileSystems = glances.getFs();
         if (fileSystems == null) {
             return;
         }
         for (FileSystem fs : fileSystems) {
-            print(fs.toString());
+            logger.info(fs.toString());
         }
+        logger.info("-----------------------------");
     }
 
     public static void testLoad() {
-        print("Testing getLoad()");
+        logger.info("Testing getLoad()");
         Load load = glances.getLoad();
         if (load == null) {
             return;
         }
-        print(load.toString());
+        logger.info(load.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testMem() {
-        print("Testing getMem()");
+        logger.info("Testing getMem()");
         Memory memory = glances.getMem();
         if (memory == null) {
             return;
         }
-        print(memory.toString());
+        logger.info(memory.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testMemSwap() {
-        print("Testing getMemSwap()");
+        logger.info("Testing getMemSwap()");
         MemorySwap swap = glances.getMemSwap();
         if (swap == null) {
             return;
         }
-        print(swap.toString());
+        logger.info(swap.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testNow() {
-        print("Testing getNow()");
+        logger.info("Testing getNow()");
         Date now = null;
         try {
             now = glances.getNow();
@@ -174,73 +163,79 @@ public class Example {
                 return;
             }
         } catch (ParseException e) {
-            print(e.toString());
+            logger.info(e.toString());
             return;
         }
-        print("[current time]: " + now.toString());
+        logger.info("[current time]: {}", now.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testLimits() {
-        print("Testing getAllLimits()");
+        logger.info("Testing getAllLimits()");
         Limits limits = glances.getAllLimits();
         if (limits == null) {
             return;
         }
-        print(limits.toString());
+        logger.info(limits.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testProcessCount() {
-        print("Testing getProcessCount()");
+        logger.info("Testing getProcessCount()");
         ProcessCount pCount = glances.getProcessCount();
         if (pCount == null) {
             return;
         }
-        print(pCount.toString());
+        logger.info(pCount.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testProcessList() {
-        print("Testing getProcessList()");
+        logger.info("Testing getProcessList()");
         List<Process> pList = glances.getProcessList();
         if (pList == null) {
             return;
         }
         for (Process proc : pList) {
-            if (proc.getMemoryPercent() > 3) {// only print non-trivial processes
-                print(proc.toString());
+            if (proc.getMemoryPercent() > 3) {// only log non-trivial processes
+                logger.info(proc.toString());
             }
         }
+        logger.info("-----------------------------");
     }
 
     public static void testSensors() {
-        print("Testing getSensors()");
+        logger.info("Testing getSensors()");
         List<Sensor> sensors = glances.getSensors();
         if (sensors == null) {
             return;
         }
         for (Sensor sensor : sensors) {
-            print(sensor.toString());
+            logger.info(sensor.toString());
         }
+        logger.info("-----------------------------");
     }
 
     public static void testSystem() {
-        print("Testing getSystem()");
+        logger.info("Testing getSystem()");
         SystemInfo sysInfo = glances.getSystem();
         if (sysInfo == null) {
             return;
         }
-        print(sysInfo.toString());
+        logger.info(sysInfo.toString());
+        logger.info("-----------------------------");
     }
 
     public static void testHardDriveTemps() {
-        print("Testing getHardDriveTemps()");
+        logger.info("Testing getHardDriveTemps()");
         List<HardDriveTemp> hddTemps = glances.getHardDriveTemps();
         if (hddTemps == null) {
             return;
         }
-        print("HDD Temp: " + hddTemps);
+        logger.info("HDD Temp: " + hddTemps);
         for (HardDriveTemp hddTemp : hddTemps) {
-            print(hddTemp.toString());
+            logger.info(hddTemp.toString());
         }
+        logger.info("-----------------------------");
     }
-
 }
