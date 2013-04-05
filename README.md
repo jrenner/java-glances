@@ -14,16 +14,16 @@ What does this library do?
 
 Build or [Download .jar](/bin)
 - grab the pre-packaged .jar with all dependencies from the [/bin](/bin) directory
-- (TODO: create ant or maven build)
+- If you have maven installed, run 'mvn install' to build library .jars in '/target'
  
 Dependencies:
 - [Apache XMLRPC](http://ws.apache.org/xmlrpc/)
 - [Google gson](https://code.google.com/p/google-gson/)
 
-The .jar in the [/bin](/bin) folder can be used to test your server, even if you have no knowledge of Java.<br>
-try "java -jar java-glances.jar HOST PORT" from the command line <br>
+The .jar with dependencies in the [/bin](/bin) folder can be used to test your server, even if you have no knowledge of Java.<br>
+try "java -jar JARFILE HOST PORT" from the command line <br>
 if you are running the Glances server at the default localhost:61209 location, just <br>
-"java -jar java-glances.jar" should be enough.
+"java -jar JARFILE" should be enough.
 
 Example usage (not guaranteed to be up to date):
 ```java
