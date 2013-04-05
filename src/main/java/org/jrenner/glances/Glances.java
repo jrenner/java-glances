@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Glances {
+    private static Logger logger = LoggerFactory.getLogger(Glances.class);
+
     private XmlRpcClient client;
     private static Object[] empty_params = new Object[]{};
     private static Gson gson;
@@ -25,11 +29,6 @@ public class Glances {
      */
     private Glances() {
     }
-
-    private void print(String text) {
-        System.out.println(text);
-    }
-
 
     public Glances(URL argURL) throws MalformedURLException {
         URL glancesServerURL = new URL(argURL.toString());
@@ -45,7 +44,7 @@ public class Glances {
             glancesServerURL = new URL(argURL.toString() + addition);
         }
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        System.out.println("Connecting to glances server: '" + glancesServerURL + "'");
+        logger.info("Connecting to glances server: '{}'", glancesServerURL);
         config.setServerURL(glancesServerURL);
         client = new XmlRpcClient();
         client.setConfig(config);
@@ -67,8 +66,6 @@ public class Glances {
         orderedUnits.add("G");
         orderedUnits.add("M");
         orderedUnits.add("K");
-
-
     }
 
     /**
@@ -84,7 +81,7 @@ public class Glances {
         try {
             result = (String) client.execute(apiCall, empty_params);
         } catch (XmlRpcException e) {
-            print("ERROR: " + apiCall + " - " + e.getMessage());
+            logger.error("ERROR: {} - {}", apiCall, e.getMessage(), e);
         }
         return result;
     }
@@ -93,7 +90,7 @@ public class Glances {
      * Net traffic bits
      * use NetworkInterface.convertToBytes() to convert
      */
-    public List<NetworkInterface> getNetwork()  {
+    public List<NetworkInterface> getNetwork() {
         String netJson = executeAPICall("getNetwork");
         if (netJson == null) {
             return null;
@@ -177,7 +174,7 @@ public class Glances {
         if (limitsJson == null) {
             return null;
         }
-        print("LIMITS:\n" + limitsJson);
+        logger.info("LIMITS:\n{}", limitsJson);
         return gson.fromJson(limitsJson, Limits.class);
     }
 
@@ -208,7 +205,7 @@ public class Glances {
             return null;
         }
         if (sensorsJson.equals("[]")) {
-            print("No data returned, were sensors enabled?");
+            logger.info("No data returned, were sensors enabled?");
         }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
@@ -228,7 +225,7 @@ public class Glances {
             return null;
         }
         if (hddJson.equals("[]")) {
-            print("No data returned, were hard drive temps enabled?\n\t" +
+            logger.info("No data returned, were hard drive temps enabled?\n\t" +
                     "is the hddtemp daemon running?");
         }
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
@@ -256,6 +253,4 @@ public class Glances {
         }
         return String.format("%.0f", val);
     }
-
-
 }
