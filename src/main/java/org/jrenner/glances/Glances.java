@@ -44,12 +44,15 @@ public class Glances {
             glancesServerURL = new URL(argURL.toString() + addition);
         }
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        logger.info("Connecting to glances server: '{}'", glancesServerURL);
+        logger.info("Initializing glances server: '{}'", glancesServerURL);
         config.setServerURL(glancesServerURL);
         client = new XmlRpcClient();
         client.setConfig(config);
         gson = new Gson();
+        initializeAutoUnitMaps();
+    }
 
+    private void initializeAutoUnitMaps() {
         units = new HashMap<String, Long>();
         units.put("E", 1152921504606846976L);
         units.put("P", 1125899906842624L);
@@ -81,7 +84,7 @@ public class Glances {
         try {
             result = (String) client.execute(apiCall, empty_params);
         } catch (XmlRpcException e) {
-            logger.error("ERROR: {} - {}", apiCall, e.getMessage(), e);
+            logger.error("ERROR: {} - {}", apiCall, e.toString());
         }
         return result;
     }
@@ -243,14 +246,21 @@ public class Glances {
      * @param val
      * @return a nice formatted String with the proper unit attached (i.e. "3.42M", "1.23G")
      */
+
     public static String autoUnit(double val) {
+        double tempVal = 0;
         for (String unit : orderedUnits) {
+            int fixedDecimalPlaces;
             long unitSize = units.get(unit);
-            if (val > unitSize) {
-                val /= unitSize;
-                return String.format("%.2f%s", val, unit);
+            tempVal = val / unitSize;
+            if (tempVal > 1) {
+                if (tempVal < 10) {
+                    return String.format("%.1f", tempVal) + unit;
+                } else {
+                    return String.format("%.0f", tempVal) + unit;
+                }
             }
         }
-        return String.format("%.0f", val);
+        return String.format("%.0f", val) + "B";
     }
 }
