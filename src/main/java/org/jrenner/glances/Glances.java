@@ -16,6 +16,7 @@ import java.util.*;
 
 public class Glances {
     private static Logger logger = LoggerFactory.getLogger(Glances.class);
+    private static final String TAG = "java-glances";
 
     private XmlRpcClient client;
     private static Object[] empty_params = new Object[]{};
@@ -24,8 +25,8 @@ public class Glances {
     private static List<String> orderedUnits;
 
     /**
-     * Default instantiation not allowed
-     * please use Glances(URL glancesServerURL)
+     * Default instantiation not allowed.
+     * Use Glances(URL glancesServerURL)
      */
     private Glances() {
     }
@@ -44,7 +45,7 @@ public class Glances {
             glancesServerURL = new URL(argURL.toString() + addition);
         }
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        logger.info("Initializing glances server: '{}'", glancesServerURL);
+        logger.info(TAG, "Initializing glances server: '{}'", glancesServerURL);
         config.setServerURL(glancesServerURL);
         client = new XmlRpcClient();
         client.setConfig(config);
@@ -79,12 +80,12 @@ public class Glances {
      * @param apiCall a valid Glances API call like "getNetwork"
      * @return the JSON string or null
      */
-    private String executeAPICall(String apiCall) {
+    public String executeAPICall(String apiCall) {
         String result = null;
         try {
             result = (String) client.execute(apiCall, empty_params);
         } catch (XmlRpcException e) {
-            logger.error("ERROR: {} - {}", apiCall, e.toString());
+            logger.error(TAG, "ERROR: {} - {}", apiCall, e.toString());
         }
         return result;
     }
@@ -177,7 +178,7 @@ public class Glances {
         if (limitsJson == null) {
             return null;
         }
-        logger.info("LIMITS:\n{}", limitsJson);
+        logger.info(TAG, "LIMITS:\n{}", limitsJson);
         return gson.fromJson(limitsJson, Limits.class);
     }
 
@@ -208,7 +209,7 @@ public class Glances {
             return null;
         }
         if (sensorsJson.equals("[]")) {
-            logger.info("No data returned, were sensors enabled?");
+            logger.warn(TAG, "No data returned");
         }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
@@ -228,8 +229,7 @@ public class Glances {
             return null;
         }
         if (hddJson.equals("[]")) {
-            logger.info("No data returned, were hard drive temps enabled?\n\t" +
-                    "is the hddtemp daemon running?");
+            logger.warn(TAG, "No data returned.");
         }
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
         return Arrays.asList(tempArray);
@@ -248,9 +248,8 @@ public class Glances {
      */
 
     public static String autoUnit(double val) {
-        double tempVal = 0;
+        double tempVal;
         for (String unit : orderedUnits) {
-            int fixedDecimalPlaces;
             long unitSize = units.get(unit);
             tempVal = val / unitSize;
             if (tempVal > 1) {

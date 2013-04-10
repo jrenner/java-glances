@@ -5,6 +5,7 @@
 
 !bin
 target
+out
 libs
 *.iml
 *.ipr

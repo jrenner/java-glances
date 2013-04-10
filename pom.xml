@@ -4,7 +4,7 @@
 
     <groupId>org.jrenner</groupId>
     <artifactId>java-glances</artifactId>
-    <version>0.7</version>
+    <version>0.8</version>
     <packaging>jar</packaging>
 
     <name>java-glances</name>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.5</version>
         </dependency>
 
     </dependencies>
