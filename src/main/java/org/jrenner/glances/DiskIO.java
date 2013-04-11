@@ -18,8 +18,8 @@ public class DiskIO {
     public String toString() {
         String writeText = Glances.autoUnit(getBytesWrittenPerSec()) + "B";
         String readText = Glances.autoUnit(getBytesReadPerSec()) + "B";
-        return String.format("Disk[%s]: write/s: %s, read/s: %s time_since_update: %.3f",
-                disk_name, writeText, readText, time_since_update);
+        return String.format("Disk[%s]: write/s: %s, read/s: %s",
+                disk_name, writeText, readText);
     }
 
     public String getDiskName() {
