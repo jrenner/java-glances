@@ -43,7 +43,7 @@ public class Example {
             logger.info(e.toString());
         }
         try {
-            glances = new Glances(serverURL);
+            glances = new Glances(serverURL, "glances:testpass");
         } catch (MalformedURLException e) {
             logger.error(e.getMessage(), e);
         }
@@ -53,7 +53,9 @@ public class Example {
         Date date = new Date();
         logger.info("Time: {}", dateFormat.format(date));
         logger.info("-----------------------------");
-        runAllTests();
+        //runAllTests();
+        testSystem();
+        testCpu();
     }
 
     public static void runAllTests() {

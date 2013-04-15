@@ -1,9 +1,9 @@
 package org.jrenner.glances;
 
 import com.google.gson.Gson;
+import org.apache.ws.commons.util.Base64;
 import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.apache.xmlrpc.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,26 @@ public class Glances {
     private Glances() {
     }
 
+    /**
+     * Basic constructor for a Glances client
+     * @param argURL - the url of the server, including port. ex: http://example.com:61209
+     * @throws MalformedURLException
+     */
     public Glances(URL argURL) throws MalformedURLException {
+       initializeSelf(argURL, null);
+    }
+
+    /**
+     * Constructor for a Glances client that sets a password
+     * @param argURL - the url of the server, including port. ex: http://example.com:61209
+     * @param password
+     * @throws MalformedURLException
+     */
+    public Glances(URL argURL, String password) throws MalformedURLException {
+        initializeSelf(argURL, password);
+    }
+
+    private void initializeSelf(URL argURL, final String password) throws MalformedURLException {
         URL glancesServerURL = new URL(argURL.toString());
         String urlString = argURL.toString();
         if (!urlString.endsWith("RPC2")) {
@@ -47,7 +66,22 @@ public class Glances {
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
         logger.info(TAG, "Initializing glances server: '{}'", glancesServerURL);
         config.setServerURL(glancesServerURL);
+        config.setEnabledForExtensions(true);
+        config.setContentLengthOptional(false);
         client = new XmlRpcClient();
+        if (password != null) {
+            // Glance servers use headers in the http request for authentication
+            // So we need a custom transport factory to add headers to the request
+            // This is the only solution I am aware of, since the Apache XMLRPC library
+            // does not open headers up to the API user
+            CustomFactoryWrapper wrapper = new CustomFactoryWrapper();
+            String encodedPassword = Base64.encode((password.getBytes()));
+            // I dont why it adds a newline..., but this fixes it
+            encodedPassword = encodedPassword.replace("\n", "");
+            System.out.printf("Encoded pw: '%s'", encodedPassword);
+            wrapper.addHeader("Authorization", "Basic " + encodedPassword);
+            client.setTransportFactory(wrapper.getFactory(client));
+        }
         client.setConfig(config);
         gson = new Gson();
         initializeAutoUnitMaps();
@@ -85,7 +119,7 @@ public class Glances {
         try {
             result = (String) client.execute(apiCall, empty_params);
         } catch (XmlRpcException e) {
-            logger.error(TAG, "ERROR: {} - {}", apiCall, e.toString());
+            logger.error("executeAPICall: {} - {}", apiCall, e.toString());
         }
         return result;
     }
