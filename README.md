@@ -12,6 +12,10 @@ What does this library do?
 - If Glances is run as ```glances -s``` then information can be retrieved from it using an XML/RPC API
 - [Read the specification of the Glances API](https://github.com/nicolargo/glances/wiki/The-Glances-API-How-To)
 
+This library is also used in the Android Glances app:
+- [Android Glances on github](https://github.com/jrenner/android-glances)
+- [Get Android Glances app] from Google Play(https://play.google.com/store/apps/details?id=org.jrenner.androidglances)
+
 Build or [Download .jar](/bin)
 - grab the pre-packaged .jar with all dependencies from the [/bin](/bin) directory
 - If you have maven installed, run 'mvn install' to build library .jars in '/target'
