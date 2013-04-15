@@ -30,28 +30,9 @@ try "java -jar JARFILE HOST PORT" from the command line <br>
 if you are running the Glances server at the default localhost:61209 location, just <br>
 "java -jar JARFILE" should be enough.
 
-Example usage (not guaranteed to be up to date):
-```java
-public class Main {
-    private static Glances glances; // this library's API object
+Documentation
+- consult the source of Example.java, it is a very simple API
 
-    public static void main(String[] args) {
-        URL serverURL = null;
-        try {
-            serverURL = new URL("http://localhost:61209"); //  can be with or without trailing '/RPC2'
-        } catch (MalformedURLException e) {
-            print(e.toString());
-        }
-        glances = new Glances(serverURL);
-        // retrieve network stats through API call
-        List<NetworkInterface> networkInterfaces = glances.getNetwork();
-        // Now we could use getters to access individual data fields
-        // But let's just use toString()
-        for (NetworkInterface net : networkInterfaces) {
-            System.out.println(net.toString())
-        }
-    }
-```
 Here is an example output from all tests in the Example class:
 ```
 Testing getNetwork():
