@@ -220,7 +220,6 @@ public class Glances {
         if (limitsJson == null) {
             return null;
         }
-        logger.info("LIMITS:\n{}", limitsJson);
         return gson.fromJson(limitsJson, Limits.class);
     }
 

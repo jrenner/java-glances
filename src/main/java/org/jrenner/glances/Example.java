@@ -9,7 +9,8 @@ public class Example {
     private static Glances glances;
 
     private static void usage() {
-        System.out.println("Usage: java -jar JARFILE <address> <port> (password)\ndefault: localhost:61209");
+        System.out.println("Usage:\njava -jar JARFILE <address> <port> <password>\n" +
+            "defaults:\n\thost=localhost\n\tport=61209\n\tno password");
     }
 
     public static void main(String[] args) {
@@ -19,7 +20,7 @@ public class Example {
         String[] help_args = {"-h", "-H", "--help", "--usage"};
         if (args.length > 0) {
             for (String help : help_args) {
-                if (args[0].contains(help) || args.length > 2) {
+                if (args[0].contains(help) || args.length > 3) {
                     usage();
                     System.exit(0);
                 }
@@ -32,16 +33,18 @@ public class Example {
         if (args.length > 2) {
             password = args[2];
         }
+        System.out.println("Using argument supplied password for authentication");
         String serverURL = "http://" + host + ":" + port;
         try {
+            // password may be null, for a server without authentication
+            // or password arg may be omitted
             glances = new Glances(serverURL, password);
         } catch (MalformedURLException e) {
             System.out.println(e.toString());
         }
 
         // run tests
-        //runAllTests();
-        testNetwork();
+        runAllTests();
     }
 
     public static void runAllTests() {
@@ -179,7 +182,7 @@ public class Example {
     }
 
     public static void testProcessList() {
-        System.out.println("Testing getProcessList()");
+        System.out.println("Testing getProcessList() - Top Processes by Memory");
         List<Process> pList = glances.getProcessList();
         if (pList == null) {
             return;

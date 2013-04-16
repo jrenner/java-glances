@@ -4,7 +4,7 @@
 
     <groupId>org.jrenner</groupId>
     <artifactId>java-glances</artifactId>
-    <version>0.8</version>
+    <version>0.8.1</version>
     <packaging>jar</packaging>
 
     <name>java-glances</name>
