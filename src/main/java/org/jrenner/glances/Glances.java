@@ -250,7 +250,7 @@ public class Glances {
             return null;
         }
         if (sensorsJson.equals("[]")) {
-            logger.warn("No data returned");
+            logger.trace("getSensors - No data returned");
         }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
@@ -270,7 +270,7 @@ public class Glances {
             return null;
         }
         if (hddJson.equals("[]")) {
-            logger.warn("No data returned.");
+            logger.trace("getHDDTemp - no data returned");
         }
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
         return Arrays.asList(tempArray);
