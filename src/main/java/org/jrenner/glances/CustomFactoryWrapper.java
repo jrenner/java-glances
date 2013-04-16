@@ -6,11 +6,22 @@ import org.apache.xmlrpc.client.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomFactoryWrapper{
+
+/**
+ * In order to enable password authentication, we need to add custom headers to the http request.
+ * This requires overriding some methods of XmlRpcTransportFactory/XmlRpcTransport
+ *
+ * <p>
+ * Usage: instantiate the CustomFactoryWrapper, then add your headers using addHeader()
+ *        finally get the factory object using getFactory()
+ *        you will then need to use the clients method for setting a new transport factory. </p>
+ */
+public class CustomFactoryWrapper {
     Map<String, String> headers = new HashMap<String, String>();
 
     /**
-     * You must first add headers before getting the factory
+     * Get the factory, and despite the client in the argument, you still need to use the client's
+     * method for setting a new transport factory.
      * @param client
      * @return
      */
@@ -25,7 +36,6 @@ public class CustomFactoryWrapper{
                         //add custom header
                         for (String key : headers.keySet()) {
                             String value = headers.get(key);
-                            System.out.println("Trying to add header:" + key + " - " + value);
                             setRequestHeader(key, value);
                         }
                     }
@@ -35,6 +45,11 @@ public class CustomFactoryWrapper{
         return factory;
     }
 
+    /**
+     * Add headers to the http request in key, value format
+     * @param header
+     * @param content
+     */
     public void addHeader(String header, String content) {
         headers.put(header, content);
     }

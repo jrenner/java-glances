@@ -3,7 +3,8 @@ package org.jrenner.glances;
 import com.google.gson.Gson;
 import org.apache.ws.commons.util.Base64;
 import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.client.*;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,6 @@ import java.util.*;
 
 public class Glances {
     private static Logger logger = LoggerFactory.getLogger(Glances.class);
-    private static final String TAG = "java-glances";
 
     private XmlRpcClient client;
     private static Object[] empty_params = new Object[]{};
@@ -36,7 +36,7 @@ public class Glances {
      * @param argURL - the url of the server, including port. ex: http://example.com:61209
      * @throws MalformedURLException
      */
-    public Glances(URL argURL) throws MalformedURLException {
+    public Glances(String argURL) throws MalformedURLException {
        initializeSelf(argURL, null);
     }
 
@@ -46,39 +46,47 @@ public class Glances {
      * @param password
      * @throws MalformedURLException
      */
-    public Glances(URL argURL, String password) throws MalformedURLException {
+    public Glances(String argURL, String password) throws MalformedURLException {
         initializeSelf(argURL, password);
     }
 
-    private void initializeSelf(URL argURL, final String password) throws MalformedURLException {
-        URL glancesServerURL = new URL(argURL.toString());
-        String urlString = argURL.toString();
-        if (!urlString.endsWith("RPC2")) {
+    private void initializeSelf(String argUrl, final String password) throws MalformedURLException {
+        URL glancesServerURL = null;
+        if (!argUrl.startsWith("http://")) {
+            argUrl = "http://" + argUrl;
+        }
+        if (!argUrl.endsWith("RPC2")) {
             String addition = null;
             // we handle both "http://example.com:61209/" and "http://example.com:61209"
-            if (urlString.endsWith("/")) {
-                addition = "RPC2";
+            if (argUrl.endsWith("/")) {
+                argUrl += "RPC2";
             } else {
-                addition = "/RPC2";
+                argUrl += "/RPC2";
             }
-            glancesServerURL = new URL(argURL.toString() + addition);
+            glancesServerURL = new URL(argUrl);
         }
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        logger.info(TAG, "Initializing glances server: '{}'", glancesServerURL);
+        logger.info("Initializing glances server: '{}'", glancesServerURL);
         config.setServerURL(glancesServerURL);
         config.setEnabledForExtensions(true);
         config.setContentLengthOptional(false);
         client = new XmlRpcClient();
         if (password != null) {
+            String validatedPass = password;
+            // Glances has usernames, but as of v1.7 only the default "glances" username is used
+            // So we take care of this behind the scenes
+            // End users need only worry about the password
+            if (!validatedPass.startsWith("glances:")) {
+                validatedPass = "glances:" + validatedPass;
+            }
             // Glance servers use headers in the http request for authentication
             // So we need a custom transport factory to add headers to the request
             // This is the only solution I am aware of, since the Apache XMLRPC library
             // does not open headers up to the API user
             CustomFactoryWrapper wrapper = new CustomFactoryWrapper();
-            String encodedPassword = Base64.encode((password.getBytes()));
-            // I dont why it adds a newline..., but this fixes it
+            String encodedPassword = Base64.encode((validatedPass.getBytes()));
+            // Seems like Base64 likes to add newlines...
             encodedPassword = encodedPassword.replace("\n", "");
-            System.out.printf("Encoded pw: '%s'", encodedPassword);
             wrapper.addHeader("Authorization", "Basic " + encodedPassword);
             client.setTransportFactory(wrapper.getFactory(client));
         }
@@ -212,7 +220,7 @@ public class Glances {
         if (limitsJson == null) {
             return null;
         }
-        logger.info(TAG, "LIMITS:\n{}", limitsJson);
+        logger.info("LIMITS:\n{}", limitsJson);
         return gson.fromJson(limitsJson, Limits.class);
     }
 
@@ -243,7 +251,7 @@ public class Glances {
             return null;
         }
         if (sensorsJson.equals("[]")) {
-            logger.warn(TAG, "No data returned");
+            logger.warn("No data returned");
         }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
@@ -263,7 +271,7 @@ public class Glances {
             return null;
         }
         if (hddJson.equals("[]")) {
-            logger.warn(TAG, "No data returned.");
+            logger.warn("No data returned.");
         }
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
         return Arrays.asList(tempArray);
