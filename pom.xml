@@ -12,7 +12,7 @@
 
     <groupId>org.jrenner</groupId>
     <artifactId>java-glances</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1</version>
     <packaging>jar</packaging>
 
     <name>java-glances</name>

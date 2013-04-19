@@ -66,6 +66,14 @@ public class Glances {
         initializeAutoUnitMaps();
     }
 
+    /**
+     * set timeout in seconds, default is none
+     * @param seconds
+     */
+    public void setTimeout(int seconds) {
+        client.setTimeout(seconds);
+    }
+
     private void initializeAutoUnitMaps() {
         units = new HashMap<String, Long>();
         units.put("E", 1152921504606846976L);

@@ -44,7 +44,7 @@ public class Example {
         } catch (MalformedURLException e) {
             System.out.println(e.toString());
         }
-
+        glances.setTimeout(15); // timeout after 15 seconds, default is no timeout
         // run tests
         try {
             runAllTests();
