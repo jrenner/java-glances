@@ -21,9 +21,8 @@ Build or [Download .jar](/bin)
 - If you have maven installed, run 'mvn install' to build library .jars in '/target'
  
 Dependencies:
-- [Apache XMLRPC](http://ws.apache.org/xmlrpc/)
+- [aXMLRPC](https://github.com/timroes/aXMLRPC)
 - [Google gson](https://code.google.com/p/google-gson/)
-- [Simple Logging Facade for Java (SLF4J)](http://www.slf4j.org/)
 
 The .jar with dependencies in the [/bin](/bin) folder can be used to test your server, even if you have no knowledge of Java.<br>
 try "java -jar JARFILE HOST PORT" from the command line <br>
