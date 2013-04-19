@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
 import de.timroes.axmlrpc.XMLRPCServerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Glances {
-    private static Logger logger = LoggerFactory.getLogger(Glances.class);
     private XMLRPCClient client;
     private static Gson gson;
     private static Map<String, Long> units;
@@ -53,7 +50,6 @@ public class Glances {
             argUrl = "http://" + argUrl;
         }
         if (!argUrl.endsWith("RPC2")) {
-            String addition = null;
             // we handle both "http://example.com:61209/" and "http://example.com:61209"
             if (argUrl.endsWith("/")) {
                 argUrl += "RPC2";
@@ -218,9 +214,6 @@ public class Glances {
         if (sensorsJson == null) {
             return null;
         }
-        if (sensorsJson.equals("[]")) {
-            logger.trace("getSensors - No data returned");
-        }
         Sensor[] tempArray = gson.fromJson(sensorsJson, Sensor[].class);
         return Arrays.asList(tempArray);
     }
@@ -237,9 +230,6 @@ public class Glances {
         String hddJson = executeAPICall("getHDDTemp");
         if (hddJson == null) {
             return null;
-        }
-        if (hddJson.equals("[]")) {
-            logger.trace("getHDDTemp - no data returned");
         }
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
         return Arrays.asList(tempArray);
