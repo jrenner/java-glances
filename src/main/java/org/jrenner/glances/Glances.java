@@ -1,10 +1,9 @@
 package org.jrenner.glances;
 
 import com.google.gson.Gson;
-import org.apache.ws.commons.util.Base64;
-import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import de.timroes.axmlrpc.XMLRPCClient;
+import de.timroes.axmlrpc.XMLRPCException;
+import de.timroes.axmlrpc.XMLRPCServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +16,7 @@ import java.util.*;
 
 public class Glances {
     private static Logger logger = LoggerFactory.getLogger(Glances.class);
-
-    private XmlRpcClient client;
-    private static Object[] empty_params = new Object[]{};
+    private XMLRPCClient client;
     private static Gson gson;
     private static Map<String, Long> units;
     private static List<String> orderedUnits;
@@ -65,32 +62,10 @@ public class Glances {
             }
             glancesServerURL = new URL(argUrl);
         }
-        XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-        logger.info("Initializing glances server: '{}'", glancesServerURL);
-        config.setServerURL(glancesServerURL);
-        config.setEnabledForExtensions(true);
-        config.setContentLengthOptional(false);
-        client = new XmlRpcClient();
+        client = new XMLRPCClient(glancesServerURL);
         if (password != null) {
-            String validatedPass = password;
-            // Glances has usernames, but as of v1.7 only the default "glances" username is used
-            // So we take care of this behind the scenes
-            // End users need only worry about the password
-            if (!validatedPass.startsWith("glances:")) {
-                validatedPass = "glances:" + validatedPass;
-            }
-            // Glance servers use headers in the http request for authentication
-            // So we need a custom transport factory to add headers to the request
-            // This is the only solution I am aware of, since the Apache XMLRPC library
-            // does not open headers up to the API user
-            CustomFactoryWrapper wrapper = new CustomFactoryWrapper();
-            String encodedPassword = Base64.encode((validatedPass.getBytes()));
-            // Seems like Base64 likes to add newlines...
-            encodedPassword = encodedPassword.replace("\n", "");
-            wrapper.addHeader("Authorization", "Basic " + encodedPassword);
-            client.setTransportFactory(wrapper.getFactory(client));
+            client.setLoginData("glances", password);
         }
-        client.setConfig(config);
         gson = new Gson();
         initializeAutoUnitMaps();
     }
@@ -122,15 +97,15 @@ public class Glances {
      * @param apiCall a valid Glances API call like "getNetwork"
      * @return the JSON string or null
      */
-    public String executeAPICall(String apiCall) throws XmlRpcException {
-         return (String) client.execute(apiCall, empty_params);
+    public String executeAPICall(String apiCall) throws XMLRPCServerException, XMLRPCException {
+        return (String)client.call(apiCall);
     }
 
     /**
      * Net traffic bits
      * use NetworkInterface.convertToBytes() to convert
      */
-    public List<NetworkInterface> getNetwork() throws XmlRpcException {
+    public List<NetworkInterface> getNetwork() throws XMLRPCServerException, XMLRPCException {
         String netJson = executeAPICall("getNetwork");
         if (netJson == null) {
             return null;
@@ -140,7 +115,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public Integer getCore() throws XmlRpcException {
+    public Integer getCore() throws XMLRPCServerException, XMLRPCException {
         String coreJson = executeAPICall("getCore");
         if (coreJson == null) {
             return null;
@@ -148,7 +123,7 @@ public class Glances {
         return gson.fromJson(coreJson, Integer.class);
     }
 
-    public Cpu getCpu() throws XmlRpcException {
+    public Cpu getCpu() throws XMLRPCServerException, XMLRPCException {
         String cpuJson = executeAPICall("getCpu");
         if (cpuJson == null) {
             return null;
@@ -156,7 +131,7 @@ public class Glances {
         return gson.fromJson(cpuJson, Cpu.class);
     }
 
-    public List<DiskIO> getDiskIO() throws XmlRpcException {
+    public List<DiskIO> getDiskIO() throws XMLRPCServerException, XMLRPCException {
         String diskJson = executeAPICall("getDiskIO");
         if (diskJson == null) {
             return null;
@@ -165,7 +140,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public List<FileSystem> getFs() throws XmlRpcException {
+    public List<FileSystem> getFs() throws XMLRPCServerException, XMLRPCException {
         String fsJson = executeAPICall("getFs");
         if (fsJson == null) {
             return null;
@@ -174,7 +149,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public Load getLoad() throws XmlRpcException {
+    public Load getLoad() throws XMLRPCServerException, XMLRPCException {
         String loadJson = executeAPICall("getLoad");
         if (loadJson == null) {
             return null;
@@ -182,7 +157,7 @@ public class Glances {
         return gson.fromJson(loadJson, Load.class);
     }
 
-    public Memory getMem() throws XmlRpcException {
+    public Memory getMem() throws XMLRPCServerException, XMLRPCException {
         String memJson = executeAPICall("getMem");
         if (memJson == null) {
             return null;
@@ -190,7 +165,7 @@ public class Glances {
         return gson.fromJson(memJson, Memory.class);
     }
 
-    public MemorySwap getMemSwap() throws XmlRpcException {
+    public MemorySwap getMemSwap() throws XMLRPCServerException, XMLRPCException {
         String swapJson = executeAPICall("getMemSwap");
         if (swapJson == null) {
             return null;
@@ -198,7 +173,7 @@ public class Glances {
         return gson.fromJson(swapJson, MemorySwap.class);
     }
 
-    public Date getNow() throws ParseException, XmlRpcException {
+    public Date getNow() throws ParseException, XMLRPCServerException, XMLRPCException {
         String result = executeAPICall("getNow");
         if (result == null) {
             return null;
@@ -209,7 +184,7 @@ public class Glances {
         return df.parse(result);
     }
 
-    public Limits getAllLimits() throws XmlRpcException {
+    public Limits getAllLimits() throws XMLRPCServerException, XMLRPCException {
         String limitsJson = executeAPICall("getAllLimits");
         if (limitsJson == null) {
             return null;
@@ -217,7 +192,7 @@ public class Glances {
         return gson.fromJson(limitsJson, Limits.class);
     }
 
-    public ProcessCount getProcessCount() throws XmlRpcException {
+    public ProcessCount getProcessCount() throws XMLRPCServerException, XMLRPCException {
         String pcountJson = executeAPICall("getProcessCount");
         if (pcountJson == null || pcountJson.equals("0")) {
             return null;
@@ -225,7 +200,7 @@ public class Glances {
         return gson.fromJson(pcountJson, ProcessCount.class);
     }
 
-    public List<Process> getProcessList() throws XmlRpcException {
+    public List<Process> getProcessList() throws XMLRPCServerException, XMLRPCException {
         String plistJson = executeAPICall("getProcessList");
         if (plistJson == null) {
             return null;
@@ -237,7 +212,7 @@ public class Glances {
     /**
      * As of Glances 1.6, only available on Linux when run with glances.py -e
      */
-    public List<Sensor> getSensors() throws XmlRpcException {
+    public List<Sensor> getSensors() throws XMLRPCServerException, XMLRPCException {
         String sensorsJson = executeAPICall("getSensors");
         // TODO let's do this better
         if (sensorsJson == null) {
@@ -250,7 +225,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public SystemInfo getSystem() throws XmlRpcException {
+    public SystemInfo getSystem() throws XMLRPCServerException, XMLRPCException {
         String systemJson = executeAPICall("getSystem");
         if (systemJson == null) {
             return null;
@@ -258,7 +233,7 @@ public class Glances {
         return gson.fromJson(systemJson, SystemInfo.class);
     }
 
-    public List<HardDriveTemp> getHardDriveTemps() throws XmlRpcException {
+    public List<HardDriveTemp> getHardDriveTemps() throws XMLRPCServerException, XMLRPCException {
         String hddJson = executeAPICall("getHDDTemp");
         if (hddJson == null) {
             return null;

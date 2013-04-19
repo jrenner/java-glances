@@ -1,10 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <repositories>
+        <!-- In Project repository for aXMLRPC, since it has no maven repo -->
+        <repository>
+            <id>in-project</id>
+            <name>axmlrpc</name>
+            <url>file://${project.basedir}/libs</url>
+        </repository>
+    </repositories>
 
     <groupId>org.jrenner</groupId>
     <artifactId>java-glances</artifactId>
-    <version>0.8.1</version>
+    <version>0.9.0</version>
     <packaging>jar</packaging>
 
     <name>java-glances</name>
@@ -29,38 +37,27 @@
             <version>2.2.2</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.xmlrpc</groupId>
-            <artifactId>xmlrpc-client</artifactId>
-            <version>3.1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
         </dependency>
-
+        <dependency>
+            <groupId>de.timroes.axmlrpc</groupId>
+            <artifactId>axmlrpc</artifactId>
+            <version>1.7.0</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-        	<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<configuration>
-        			<source>1.5</source>
-        			<target>1.5</target>
-        		</configuration>
-        	</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>

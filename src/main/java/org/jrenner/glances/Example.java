@@ -1,6 +1,6 @@
 package org.jrenner.glances;
 
-import org.apache.xmlrpc.XmlRpcException;
+import de.timroes.axmlrpc.XMLRPCException;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -48,12 +48,12 @@ public class Example {
         // run tests
         try {
             runAllTests();
-        } catch (XmlRpcException e) {
+        } catch (XMLRPCException e) {
             System.out.println(e.toString());
         }
     }
 
-    public static void runAllTests() throws XmlRpcException {
+    public static void runAllTests() throws XMLRPCException {
         testNetwork();
         testCpu();
         testDiskIO();
@@ -70,7 +70,7 @@ public class Example {
         testHardDriveTemps();
     }
 
-    public static void testNetwork() throws XmlRpcException {
+    public static void testNetwork() throws XMLRPCException {
         System.out.println("Testing getNetwork():");
         List<NetworkInterface> networkInterfaces = glances.getNetwork();
         if (networkInterfaces == null) {
@@ -82,7 +82,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testCpu() throws XmlRpcException {
+    public static void testCpu() throws XMLRPCException {
         System.out.println("Testing getCore() and getCpu()");
         Integer cores = glances.getCore();
         if (cores == null) {
@@ -97,7 +97,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testDiskIO() throws XmlRpcException {
+    public static void testDiskIO() throws XMLRPCException {
         System.out.println("Testing getDiskIO()");
         List<DiskIO> disks = glances.getDiskIO();
         if (disks == null) {
@@ -109,7 +109,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testFs() throws XmlRpcException {
+    public static void testFs() throws XMLRPCException {
         System.out.println("Testing getFs()");
         List<FileSystem> fileSystems = glances.getFs();
         if (fileSystems == null) {
@@ -121,7 +121,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testLoad() throws XmlRpcException {
+    public static void testLoad() throws XMLRPCException {
         System.out.println("Testing getLoad()");
         Load load = glances.getLoad();
         if (load == null) {
@@ -131,7 +131,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testMem() throws XmlRpcException {
+    public static void testMem() throws XMLRPCException {
         System.out.println("Testing getMem()");
         Memory memory = glances.getMem();
         if (memory == null) {
@@ -141,7 +141,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testMemSwap() throws XmlRpcException {
+    public static void testMemSwap() throws XMLRPCException {
         System.out.println("Testing getMemSwap()");
         MemorySwap swap = glances.getMemSwap();
         if (swap == null) {
@@ -151,7 +151,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testNow() throws XmlRpcException {
+    public static void testNow() throws XMLRPCException {
         System.out.println("Testing getNow()");
         Date now = null;
         try {
@@ -167,7 +167,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testLimits() throws XmlRpcException {
+    public static void testLimits() throws XMLRPCException {
         System.out.println("Testing getAllLimits()");
         Limits limits = glances.getAllLimits();
         if (limits == null) {
@@ -177,7 +177,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testProcessCount() throws XmlRpcException {
+    public static void testProcessCount() throws XMLRPCException {
         System.out.println("Testing getProcessCount()");
         ProcessCount pCount = glances.getProcessCount();
         if (pCount == null) {
@@ -187,7 +187,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testProcessList() throws XmlRpcException {
+    public static void testProcessList() throws XMLRPCException {
         System.out.println("Testing getProcessList() - Top Processes by Memory");
         List<Process> pList = glances.getProcessList();
         if (pList == null) {
@@ -201,7 +201,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testSensors() throws XmlRpcException {
+    public static void testSensors() throws XMLRPCException {
         System.out.println("Testing getSensors()");
         List<Sensor> sensors = glances.getSensors();
         if (sensors == null) {
@@ -213,7 +213,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testSystem() throws XmlRpcException {
+    public static void testSystem() throws XMLRPCException {
         System.out.println("Testing getSystem()");
         SystemInfo sysInfo = glances.getSystem();
         if (sysInfo == null) {
@@ -223,7 +223,7 @@ public class Example {
         System.out.println("-----------------------------");
     }
 
-    public static void testHardDriveTemps() throws XmlRpcException {
+    public static void testHardDriveTemps() throws XMLRPCException {
         System.out.println("Testing getHardDriveTemps()");
         List<HardDriveTemp> hddTemps = glances.getHardDriveTemps();
         if (hddTemps == null) {
