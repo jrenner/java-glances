@@ -15,12 +15,11 @@ public class NetworkInterface {
 
     @Override
     public String toString() {
-        char suffix = 'B';
-        String rxText = Glances.autoUnit(getRxPerSecond()) + suffix;
-        String txText = Glances.autoUnit(getTxPerSecond()) + suffix;
-        String cumulative_rxText = Glances.autoUnit(getCumulativeRx()) + suffix;
-        String cumulative_txText = Glances.autoUnit(getCumulativeTx()) + suffix;
-        String text = String.format("Net[%s]: Rx/s: %s Tx/s: %s TOTAL: Rx/Tx %s / %s",
+        String rxText = Glances.autoUnit(getRxPerSecond());
+        String txText = Glances.autoUnit(getTxPerSecond());
+        String cumulative_rxText = Glances.autoUnit(getCumulativeRx());
+        String cumulative_txText = Glances.autoUnit(getCumulativeTx());
+		String text = String.format("Net[%s]: Rx/s: %s Tx/s: %s TOTAL: Rx/Tx %s / %s",
                 interface_name, rxText, txText, cumulative_rxText, cumulative_txText);
         return text;
     }

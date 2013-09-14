@@ -44,12 +44,16 @@ public class Example {
         } catch (MalformedURLException e) {
             System.out.println(e.toString());
         }
-        glances.setTimeout(15); // timeout after 15 seconds, default is no timeout
+        glances.setTimeout(30); // timeout after 30 seconds, default is no timeout
         // run tests
         try {
-            runAllTests();
+            //runAllTests();
+			//testBattery();
+			//testVersion();
+			//testNetworkTimeSinceLastUpdate();
+			testNetwork();
         } catch (XMLRPCException e) {
-            System.out.println(e.toString());
+			throw new RuntimeException(e);
         }
     }
 
@@ -68,6 +72,10 @@ public class Example {
         testSensors();
         testSystem();
         testHardDriveTemps();
+		testMonitored();
+		testBattery();
+		testVersion();
+		testNetworkTimeSinceLastUpdate();
     }
 
     public static void testNetwork() throws XMLRPCException {
@@ -235,4 +243,31 @@ public class Example {
         }
         System.out.println("-----------------------------");
     }
+
+	public static void testMonitored() throws XMLRPCException {
+		System.out.println("Testing getAllMonitored()");
+		List<MonitoredProcess> monProcs = glances.getAllMonitored();
+		if (monProcs == null) return;
+		for (MonitoredProcess monProc: monProcs) {
+			System.out.println(monProc.toString());
+		}
+	}
+
+	public static void testBattery() throws XMLRPCException {
+		System.out.println("Testing getBatPercent()");
+		List<Battery> batteries = glances.getBattery();
+		if (batteries == null) return;
+		for (Battery battery : batteries) {
+			System.out.println(battery.toString());
+		}
+	}
+
+	public static void testVersion() throws XMLRPCException {
+		System.out.println("Testing init() - gets version");
+		System.out.println(glances.initializeAndGetVersion());
+	}
+
+	public static void testNetworkTimeSinceLastUpdate() throws XMLRPCException {
+		System.out.println(glances.getNetworkTimeSinceLastUpdate());
+	}
 }

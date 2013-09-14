@@ -5,6 +5,7 @@ import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
 import de.timroes.axmlrpc.XMLRPCServerException;
 
+import java.lang.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -101,15 +102,11 @@ public class Glances {
      * @param apiCall a valid Glances API call like "getNetwork"
      * @return the JSON string or null
      */
-    public String executeAPICall(String apiCall) throws XMLRPCServerException, XMLRPCException {
+    public String executeAPICall(String apiCall) throws XMLRPCException {
         return (String)client.call(apiCall);
     }
 
-    /**
-     * Net traffic bits
-     * use NetworkInterface.convertToBytes() to convert
-     */
-    public List<NetworkInterface> getNetwork() throws XMLRPCServerException, XMLRPCException {
+    public List<NetworkInterface> getNetwork() throws XMLRPCException {
         String netJson = executeAPICall("getNetwork");
         if (netJson == null) {
             return null;
@@ -119,7 +116,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public Integer getCore() throws XMLRPCServerException, XMLRPCException {
+    public Integer getCore() throws XMLRPCException {
         String coreJson = executeAPICall("getCore");
         if (coreJson == null) {
             return null;
@@ -127,7 +124,7 @@ public class Glances {
         return gson.fromJson(coreJson, Integer.class);
     }
 
-    public Cpu getCpu() throws XMLRPCServerException, XMLRPCException {
+    public Cpu getCpu() throws XMLRPCException {
         String cpuJson = executeAPICall("getCpu");
         if (cpuJson == null) {
             return null;
@@ -135,7 +132,7 @@ public class Glances {
         return gson.fromJson(cpuJson, Cpu.class);
     }
 
-    public List<DiskIO> getDiskIO() throws XMLRPCServerException, XMLRPCException {
+    public List<DiskIO> getDiskIO() throws XMLRPCException {
         String diskJson = executeAPICall("getDiskIO");
         if (diskJson == null) {
             return null;
@@ -144,7 +141,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public List<FileSystem> getFs() throws XMLRPCServerException, XMLRPCException {
+    public List<FileSystem> getFs() throws XMLRPCException {
         String fsJson = executeAPICall("getFs");
         if (fsJson == null) {
             return null;
@@ -153,7 +150,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public Load getLoad() throws XMLRPCServerException, XMLRPCException {
+    public Load getLoad() throws XMLRPCException {
         String loadJson = executeAPICall("getLoad");
         if (loadJson == null) {
             return null;
@@ -161,7 +158,7 @@ public class Glances {
         return gson.fromJson(loadJson, Load.class);
     }
 
-    public Memory getMem() throws XMLRPCServerException, XMLRPCException {
+    public Memory getMem() throws XMLRPCException {
         String memJson = executeAPICall("getMem");
         if (memJson == null) {
             return null;
@@ -169,7 +166,7 @@ public class Glances {
         return gson.fromJson(memJson, Memory.class);
     }
 
-    public MemorySwap getMemSwap() throws XMLRPCServerException, XMLRPCException {
+    public MemorySwap getMemSwap() throws XMLRPCException {
         String swapJson = executeAPICall("getMemSwap");
         if (swapJson == null) {
             return null;
@@ -177,7 +174,7 @@ public class Glances {
         return gson.fromJson(swapJson, MemorySwap.class);
     }
 
-    public Date getNow() throws ParseException, XMLRPCServerException, XMLRPCException {
+    public Date getNow() throws ParseException, XMLRPCException {
         String result = executeAPICall("getNow");
         if (result == null) {
             return null;
@@ -188,7 +185,7 @@ public class Glances {
         return df.parse(result);
     }
 
-    public Limits getAllLimits() throws XMLRPCServerException, XMLRPCException {
+    public Limits getAllLimits() throws XMLRPCException {
         String limitsJson = executeAPICall("getAllLimits");
         if (limitsJson == null) {
             return null;
@@ -196,7 +193,7 @@ public class Glances {
         return gson.fromJson(limitsJson, Limits.class);
     }
 
-    public ProcessCount getProcessCount() throws XMLRPCServerException, XMLRPCException {
+    public ProcessCount getProcessCount() throws XMLRPCException {
         String pcountJson = executeAPICall("getProcessCount");
         if (pcountJson == null || pcountJson.equals("0")) {
             return null;
@@ -204,7 +201,7 @@ public class Glances {
         return gson.fromJson(pcountJson, ProcessCount.class);
     }
 
-    public List<Process> getProcessList() throws XMLRPCServerException, XMLRPCException {
+    public List<Process> getProcessList() throws XMLRPCException {
         String plistJson = executeAPICall("getProcessList");
         if (plistJson == null) {
             return null;
@@ -216,7 +213,7 @@ public class Glances {
     /**
      * As of Glances 1.6, only available on Linux when run with glances.py -e
      */
-    public List<Sensor> getSensors() throws XMLRPCServerException, XMLRPCException {
+    public List<Sensor> getSensors() throws XMLRPCException {
         String sensorsJson = executeAPICall("getSensors");
         // TODO let's do this better
         if (sensorsJson == null) {
@@ -226,7 +223,7 @@ public class Glances {
         return Arrays.asList(tempArray);
     }
 
-    public SystemInfo getSystem() throws XMLRPCServerException, XMLRPCException {
+    public SystemInfo getSystem() throws XMLRPCException {
         String systemJson = executeAPICall("getSystem");
         if (systemJson == null) {
             return null;
@@ -234,7 +231,7 @@ public class Glances {
         return gson.fromJson(systemJson, SystemInfo.class);
     }
 
-    public List<HardDriveTemp> getHardDriveTemps() throws XMLRPCServerException, XMLRPCException {
+    public List<HardDriveTemp> getHardDriveTemps() throws XMLRPCException {
         String hddJson = executeAPICall("getHDDTemp");
         if (hddJson == null) {
             return null;
@@ -242,6 +239,44 @@ public class Glances {
         HardDriveTemp[] tempArray = gson.fromJson(hddJson, HardDriveTemp[].class);
         return Arrays.asList(tempArray);
     }
+
+	// new methods added in Glances 1.7 start here
+
+	public List<MonitoredProcess> getAllMonitored() throws XMLRPCException {
+		String monitoredJson = executeAPICall("getAllMonitored");
+		if (monitoredJson == null) {
+			return null;
+		}
+		MonitoredProcess[] tempArray = gson.fromJson(monitoredJson, MonitoredProcess[].class);
+		return Arrays.asList(tempArray);
+	}
+
+	public List<Battery> getBattery() throws XMLRPCException {
+		String batteryJson = executeAPICall("getBatPercent");
+		if (batteryJson == null) return null;
+		Battery[] tempArray = gson.fromJson(batteryJson, Battery[].class);
+		return Arrays.asList(tempArray);
+	}
+
+	/**
+	 * NOTE: do not call this method more than once, as it will affect data. Get the version once and store it yourself
+	 * @return A string representing the version of Glances on the server
+	 * @throws XMLRPCException
+	 */
+	public String initializeAndGetVersion() throws XMLRPCException {
+		String version = executeAPICall("init");
+		// raw string, not JSON
+		return version;
+	}
+
+	public NetworkTime getNetworkTimeSinceLastUpdate() throws XMLRPCException {
+		// special case, returns a double, not a string
+		Double time = (Double) client.call("getNetTimeSinceLastUpdate");
+		System.out.println(time);
+		return new NetworkTime(time);
+	}
+
+	// end of 1.7 new methods
 
     /**
      * Based on __autoUnit() from glances.py
@@ -268,6 +303,6 @@ public class Glances {
                 }
             }
         }
-        return String.format("%.0f", val) + "B";
+        return String.format("%.0f", val);
     }
 }
