@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Glances {
+	// version should match Glances' (the python program) version number, if Java Glances is up to date.
+	private static final String version = "1.7";
     private XMLRPCClient client;
     private static Gson gson;
     private static Map<String, Long> units;
@@ -44,6 +46,10 @@ public class Glances {
     public Glances(String argURL, String password) throws MalformedURLException {
         initializeSelf(argURL, password);
     }
+
+	public static String getJavaGlancesVersion() {
+		return version;
+	}
 
     private void initializeSelf(String argUrl, final String password) throws MalformedURLException {
         URL glancesServerURL = null;
@@ -187,6 +193,7 @@ public class Glances {
 
     public Limits getAllLimits() throws XMLRPCException {
         String limitsJson = executeAPICall("getAllLimits");
+		System.out.println("json" + limitsJson);
         if (limitsJson == null) {
             return null;
         }
@@ -253,13 +260,15 @@ public class Glances {
 
 	public List<Battery> getBattery() throws XMLRPCException {
 		String batteryJson = executeAPICall("getBatPercent");
+		// test string
+		//batteryJson = "[{\"batpercent\" : 92}]"; // TEST
 		if (batteryJson == null) return null;
 		Battery[] tempArray = gson.fromJson(batteryJson, Battery[].class);
 		return Arrays.asList(tempArray);
 	}
 
 	/**
-	 * NOTE: do not call this method more than once, as it will affect data. Get the version once and store it yourself
+	 * NOTE: do not call this method more than once, as it will reset data. Get the version once and store it yourself
 	 * @return A string representing the version of Glances on the server
 	 * @throws XMLRPCException
 	 */
@@ -267,13 +276,6 @@ public class Glances {
 		String version = executeAPICall("init");
 		// raw string, not JSON
 		return version;
-	}
-
-	public NetworkTime getNetworkTimeSinceLastUpdate() throws XMLRPCException {
-		// special case, returns a double, not a string
-		Double time = (Double) client.call("getNetTimeSinceLastUpdate");
-		System.out.println(time);
-		return new NetworkTime(time);
 	}
 
 	// end of 1.7 new methods

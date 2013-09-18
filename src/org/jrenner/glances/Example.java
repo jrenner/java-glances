@@ -44,20 +44,19 @@ public class Example {
         } catch (MalformedURLException e) {
             System.out.println(e.toString());
         }
-        glances.setTimeout(30); // timeout after 30 seconds, default is no timeout
+        glances.setTimeout(15); // timeout after n seconds, default is no timeout
         // run tests
         try {
-            //runAllTests();
-			//testBattery();
-			//testVersion();
-			//testNetworkTimeSinceLastUpdate();
-			testNetwork();
-        } catch (XMLRPCException e) {
+			String javaGlancesVersion = glances.getJavaGlancesVersion();
+			System.out.println("Java Glances version " + javaGlancesVersion);
+			runAllTests();
+		} catch (XMLRPCException e) {
 			throw new RuntimeException(e);
         }
     }
 
     public static void runAllTests() throws XMLRPCException {
+		testVersion();
         testNetwork();
         testCpu();
         testDiskIO();
@@ -74,8 +73,6 @@ public class Example {
         testHardDriveTemps();
 		testMonitored();
 		testBattery();
-		testVersion();
-		testNetworkTimeSinceLastUpdate();
     }
 
     public static void testNetwork() throws XMLRPCException {
@@ -248,6 +245,10 @@ public class Example {
 		System.out.println("Testing getAllMonitored()");
 		List<MonitoredProcess> monProcs = glances.getAllMonitored();
 		if (monProcs == null) return;
+		if (monProcs.size() == 0) {
+			System.out.println("No monitored processes");
+			return;
+		}
 		for (MonitoredProcess monProc: monProcs) {
 			System.out.println(monProc.toString());
 		}
@@ -257,6 +258,10 @@ public class Example {
 		System.out.println("Testing getBatPercent()");
 		List<Battery> batteries = glances.getBattery();
 		if (batteries == null) return;
+		if (batteries.size() == 0) {
+			System.out.println("No batteries");
+			return;
+		}
 		for (Battery battery : batteries) {
 			System.out.println(battery.toString());
 		}
@@ -265,9 +270,5 @@ public class Example {
 	public static void testVersion() throws XMLRPCException {
 		System.out.println("Testing init() - gets version");
 		System.out.println(glances.initializeAndGetVersion());
-	}
-
-	public static void testNetworkTimeSinceLastUpdate() throws XMLRPCException {
-		System.out.println(glances.getNetworkTimeSinceLastUpdate());
 	}
 }
