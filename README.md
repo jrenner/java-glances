@@ -14,9 +14,8 @@ This library is also used in the Android Glances app:
 - [Android Glances on github](https://github.com/jrenner/android-glances)
 - [Get Android Glances app from Google Play](https://play.google.com/store/apps/details?id=org.jrenner.androidglances)
 
-Build or [Download .jar](/bin)
+[Download](/bin)
 - grab the pre-packaged .jar with all dependencies from the [/bin](/bin) directory
-- If you have maven installed, run 'mvn install' to build library .jars in '/target'
  
 Dependencies:
 - [aXMLRPC](https://github.com/timroes/aXMLRPC)
